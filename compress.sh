@@ -14,8 +14,7 @@ function build() {
 		echo "To: mario.frank@uni-potsdam.de" > $1/$MAILTXT
 		echo "From: menski@uni-potsdam.de" >> $1/$MAILTXT
 		echo "CC: ohmann@uni-potsdam.de" >> $1/$MAILTXT
-		echo "Subject: VS_${1}_Menski_Ohmann" | sed 's/Uebung/Blatt/' >> $1/$MAILTXT
-		echo -e "\nHallo Mario,\n\nanbei die Quelltexte zur $1 von:" >> $1/$MAILTXT
+		echo -e "Subject: VS_${1}_Menski_Ohmann\n\nHallo Mario,\n\nanbei die Quelltexte zu $1 von:" | sed 's/Uebung/Blatt/' >> $1/$MAILTXT
 		echo -e "Sebastian Menski (734272)\nMartin Ohmann (734801)" >> $1/$MAILTXT
 		echo -e "\nGrüße Sebastian" >> $1/$MAILTXT
 	fi
