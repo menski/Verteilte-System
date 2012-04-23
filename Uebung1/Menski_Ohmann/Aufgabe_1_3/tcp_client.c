@@ -1,3 +1,9 @@
+/**
+ * TCP Client
+ * 
+ * @author Sebastian Menski (734272) <menski@uni-potsdam.de>
+ * @author Martin Ohmann (734801) <ohmann@uni-potsdam.de>
+ */
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <stdio.h>
