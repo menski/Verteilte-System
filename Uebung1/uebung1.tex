@@ -35,8 +35,41 @@
 \section*{Aufgabe 1.1}
 
 \begin{description}
-	\item[Primäre Transparenzeigenschaften] Text
-	\item[Sekundäre Transparenzeigenschaften] Text
+	\item[Primäre Transparenzeigenschaften] sollen die Verteiltheit des Systems gegenüber dem Benutzer
+	verdecken. Dabei handelt es sich um folgende Transparenzen:
+	\begin{itemize}
+		\item \textbf{Ortstransparenz} steht dafür, dass der Nutzer nicht den genauen Ort der Ressource kennen
+		muss, dass bedeutet:
+		\begin{itemize}
+			\item \textbf{Zugriffstransparenz}: Der Zugriff auf einen lokalen oder entfernten Webserver erfolgt
+			immer mit den selben Programmen (z.B. Webbrowser, ssh, telnet)
+			\item \textbf{Namenstransparenz}: Ist lokal eine Replikation eines entfernten Webservers eingerichtet,
+			so kann auf alle Ressourcen über den selben Pfad, abgesehen vom Hostname, zugegriffen werden. Dabei
+			ist es für den Nutzer nicht von Bedeutung wo diese Ressourcen genau auf dem Dateisystem liegen.
+		\end{itemize}
+		\item \textbf{Skalierungs-Transparenz} bedeutet, dass der Nutzer eine Erweiterung des Systems nicht
+		bemerkt oder davon beeinträchtigt wird. Das heißt für einen Webserver, dass dieser trotz
+		Erweiterung des System, weiterhin	alle Dienste anbietet und nach der Erweiterung im besten Fall
+		eine bessere Leistung hat.
+	\end{itemize}
+	\item[Sekundäre Transparenzeigenschaften] sollen die Verteiltheit des Systems zur Steigerung der
+	Performance und der Fehlertoleranz ausnutzen. Dabei handelt es sich um folgende Transparenzen:
+	\begin{itemize}
+		\item \textbf{Replikationstransparenz} soll die Verfügbarkeit des Systems durch die Replikation
+		der Ressourcen erhöhen. So merk ein Benutzer eines Webservers nicht, ob er mit einer einzelnen
+		Machine kommuniziert oder mit einem ganzes Cluster von Webservern.
+		\item \textbf{Migrationstransparenz} soll die Verlagerung von Prozessen oder das Verschieben von
+		Ressourcen vor dem Nutzer verbergen. So sollte ein Nutzer es nicht merken falls auf eine andere
+		Webserver-Software gewechselt wird oder die Ressourcen auf dem Webserver lokal verschoben
+		werden.
+		\item \textbf{Fehlertransparenz} soll verhindert das Fehler für Nutzer sichtbar sind. So sollte
+		z.B. ein Webserver-Cluster den Ausfall eines Servers selber auffangen, ohne dass der Nutzer dies
+		merkt.
+		\item \textbf{Nebenläugkeits-Transparenz} soll den parallelen Zugriff auf gemeinsame Resource
+		synchronisieren. Also Nutzer sollen nicht bemerken, wenn anderen Nutzer ebenfalls die selbe
+		Ressource des Webservers anfordern. Bei verändernden Aktivitäten auf dem Webserver, muss dieser
+		dafür sorgen, dass es zu keinen Konflikten kommt. 
+	\end{itemize}
 \end{description}
 
 
