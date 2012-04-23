@@ -13,7 +13,7 @@ public class TCPServer {
 	
 	// define constants
 	private static final int RANDOM_MIN = 0;
-	private static final int RANDOM_MAX = 999999;
+	private static final int RANDOM_MAX = 9999999;
 	private static final int RANDOM_NUM_DIGITS = 7;
 	private static final int SERVER_PORT = 10041;
 	

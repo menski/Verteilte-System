@@ -129,7 +129,7 @@ public class TCPClient {
 		// exit on missing arguments
 		if (args.length < 2) {
 			System.err.println("Usage: java TCPClient <host_address> <matriculation_number>");
-            System.exit(-1);
+			System.exit(-1);
 		}
 		
 		int matNum = -1;
