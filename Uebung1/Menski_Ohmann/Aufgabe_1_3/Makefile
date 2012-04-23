@@ -13,7 +13,7 @@ test: build
 	@./$(CLIENT) 127.0.0.1 123456
 
 clean:
-	rm $(SERVER)
-	rm $(CLIENT)
+	rm -rf $(SERVER)
+	rm -rf $(CLIENT)
 
 .PHONY: build test clean
