@@ -34,43 +34,43 @@
 
 \section*{Aufgabe 1.1}
 
-\begin{description}
-	\item[Primäre Transparenzeigenschaften] sollen die Verteiltheit des Systems gegenüber dem Benutzer
+\begin{itemize}
+	\item \textbf{Primäre Transparenzeigenschaften} sollen die Verteiltheit des Systems gegenüber dem Benutzer
 	verdecken. Dabei handelt es sich um folgende Transparenzen:
 	\begin{itemize}
 		\item \textbf{Ortstransparenz} steht dafür, dass der Nutzer nicht den genauen Ort der Ressource kennen
-		muss, dass bedeutet:
+		muss, das bedeutet:
 		\begin{itemize}
 			\item \textbf{Zugriffstransparenz}: Der Zugriff auf einen lokalen oder entfernten Webserver erfolgt
-			immer mit den selben Programmen (z.B. Webbrowser, ssh, telnet)
+			immer mit den selben Programmen (z.B. Webbrowser, ssh, telnet).
 			\item \textbf{Namenstransparenz}: Ist lokal eine Replikation eines entfernten Webservers eingerichtet,
-			so kann auf alle Ressourcen über den selben Pfad, abgesehen vom Hostname, zugegriffen werden. Dabei
+			so kann auf alle Ressourcen über denselben Pfad, abgesehen vom Hostname, zugegriffen werden. Dabei
 			ist es für den Nutzer nicht von Bedeutung wo diese Ressourcen genau auf dem Dateisystem liegen.
 		\end{itemize}
-		\item \textbf{Skalierungs-Transparenz} bedeutet, dass der Nutzer eine Erweiterung des Systems nicht
+		\item \textbf{Skalierungstransparenz} bedeutet, dass der Nutzer eine Erweiterung des Systems nicht
 		bemerkt oder davon beeinträchtigt wird. Das heißt für einen Webserver, dass dieser trotz
-		Erweiterung des System, weiterhin	alle Dienste anbietet und nach der Erweiterung im besten Fall
-		eine bessere Leistung hat.
+		Erweiterung des Systems weiterhin alle Dienste anbietet und nach der Erweiterung im besten Fall
+		leistungsfähiger ist.
 	\end{itemize}
-	\item[Sekundäre Transparenzeigenschaften] sollen die Verteiltheit des Systems zur Steigerung der
+	\item \textbf{Sekundäre Transparenzeigenschaften} sollen die Verteiltheit des Systems zur Steigerung der
 	Performance und der Fehlertoleranz ausnutzen. Dabei handelt es sich um folgende Transparenzen:
 	\begin{itemize}
 		\item \textbf{Replikationstransparenz} soll die Verfügbarkeit des Systems durch die Replikation
-		der Ressourcen erhöhen. So merk ein Benutzer eines Webservers nicht, ob er mit einer einzelnen
+		der Ressourcen erhöhen. So merkt ein Benutzer eines Webservers nicht, ob er mit einer einzelnen
 		Machine kommuniziert oder mit einem ganzes Cluster von Webservern.
 		\item \textbf{Migrationstransparenz} soll die Verlagerung von Prozessen oder das Verschieben von
-		Ressourcen vor dem Nutzer verbergen. So sollte ein Nutzer es nicht merken falls auf eine andere
+		Ressourcen vor dem Nutzer verbergen. So sollte ein Nutzer es nicht merken, falls auf eine andere
 		Webserver-Software gewechselt wird oder die Ressourcen auf dem Webserver lokal verschoben
 		werden.
-		\item \textbf{Fehlertransparenz} soll verhindert das Fehler für Nutzer sichtbar sind. So sollte
-		z.B. ein Webserver-Cluster den Ausfall eines Servers selber auffangen, ohne dass der Nutzer dies
-		merkt.
-		\item \textbf{Nebenläugkeits-Transparenz} soll den parallelen Zugriff auf gemeinsame Resource
-		synchronisieren. Also Nutzer sollen nicht bemerken, wenn anderen Nutzer ebenfalls die selbe
+		\item \textbf{Fehlertransparenz} soll verhindern, dass Fehler für Nutzer sichtbar sind. So sollte
+		z.B. ein Webserver-Cluster den Ausfall eines Servers selbst auffangen, ohne dass der Nutzer dies
+		bemerkt.
+		\item \textbf{Nebenläugkeitstransparenz} soll den parallelen Zugriff auf gemeinsame Ressourcen
+		synchronisieren. Nutzer sollen nicht bemerken, wenn anderen Nutzer ebenfalls dieselbe
 		Ressource des Webservers anfordern. Bei verändernden Aktivitäten auf dem Webserver, muss dieser
 		dafür sorgen, dass es zu keinen Konflikten kommt. 
 	\end{itemize}
-\end{description}
+\end{itemize}
 
 
 \section*{Aufgabe 1.2}
@@ -93,7 +93,7 @@
 				nur die veränderten Teile dieser übertragen, was eine erhebliche Einsparung von 
 				Traffic zur Folge haben kann.
 		\end{description}
-	\item Zu Abgleich von Dateien zwischen einem mobilen Client und einem Fileserver 
+	\item Zum Abgleich von Dateien zwischen einem mobilen Client und einem Fileserver 
 		eignet sich \texttt{rdist} am besten, da hier die Daten, anders als bei \texttt{scp},
 		und \texttt{rsync}, in beide Richtungen synchronisiert werden.
 \end{enumerate}
