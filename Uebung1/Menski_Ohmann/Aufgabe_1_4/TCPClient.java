@@ -80,6 +80,9 @@ public class TCPClient {
 				clientSocket.close();
 				System.out.println("Connection closed");
 			}
+			catch(NullPointerException e) {
+				e.printStackTrace();
+			}
 			catch(IOException e) {
 				e.printStackTrace();
 			}
@@ -128,7 +131,11 @@ public class TCPClient {
             System.exit(-1);
 		}
 		
-		int matNum = Integer.parseInt(args[1]);
+		int matNum = -1;
+		
+		try {
+			matNum = Integer.parseInt(args[1]);
+		} catch(NumberFormatException e) {}
 		
 		// exit if matriculation number is out of allowed bounds
 		if (matNum < MN_MIN || matNum > MN_MAX) {
