@@ -60,21 +60,21 @@ public class TCPClient {
 						sendMessage("3 "+ messageParts[1] + " " + messageParts[2]);
 					}
 				}
-				catch(ClassNotFoundException e) {
+				catch (ClassNotFoundException e) {
 					System.err.println("Error: received data has unknown format");
 				}
-				catch(ArrayIndexOutOfBoundsException e) {
+				catch (ArrayIndexOutOfBoundsException e) {
 					System.err.println("Error: invalid number of message parts");
 				}
-			} while(!messageParts[0].equals("2"));
+			} while (!messageParts[0].equals("2"));
 		}
-		catch(ConnectException e) {
+		catch (ConnectException e) {
 			System.err.println("Connection failed: refused");
 		}		
-		catch(UnknownHostException e) {
+		catch (UnknownHostException e) {
 			System.err.println("Connection failed: unknown host");
 		}
-		catch(IOException e) {
+		catch (IOException e) {
 			System.err.println("IO Error: unable to open input/output streams");
 		}
 		finally {
@@ -85,8 +85,8 @@ public class TCPClient {
 				clientSocket.close();
 				System.out.println("Connection closed");
 			}
-			catch(NullPointerException e) {}
-			catch(IOException e) {}
+			catch (NullPointerException e) {}
+			catch (IOException e) {}
 		}
 	}
 	
@@ -110,7 +110,6 @@ public class TCPClient {
 		tmp = msg.split(" ");
 		
 		return tmp;
-		
 	}
 	
 	private void sendMessage(String msg) {
@@ -120,7 +119,7 @@ public class TCPClient {
 			out.flush();
 			System.out.println("client>" + msg);
 		}
-		catch(IOException e) {
+		catch (IOException e) {
 			System.err.println("Error: unable to send message");
 		}
 	}
@@ -136,7 +135,7 @@ public class TCPClient {
 		
 		try {
 			matNum = Integer.parseInt(args[1]);
-		} catch(NumberFormatException e) {}
+		} catch (NumberFormatException e) {}
 		
 		// exit if matriculation number is out of allowed bounds
 		if (matNum < MN_MIN || matNum > MN_MAX) {
@@ -150,7 +149,7 @@ public class TCPClient {
 		if (args.length >= 3) {
 			try {
 				port = Integer.parseInt(args[2]);
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				System.out.println("Invalid port: using default port (" + SERVER_PORT + ")");
 			}
 		}

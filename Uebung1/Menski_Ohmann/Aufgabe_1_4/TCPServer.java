@@ -30,7 +30,7 @@ public class TCPServer {
 	}
 	
 	public void run() {
-		try{
+		try {
 			// create a server socket
 			serverSocket = new ServerSocket(port, 10);
 			System.out.println("Opened socket on port " + port);
@@ -63,19 +63,19 @@ public class TCPServer {
 						sendMessage("2 " + messageParts[1] + " " + intToString(randomInt, RANDOM_NUM_DIGITS));
 					}
 				}
-				catch(ClassNotFoundException e) {
+				catch (ClassNotFoundException e) {
 					System.err.println("Error: received data has unknown format");
 				}
-				catch(ArrayIndexOutOfBoundsException e) {
+				catch (ArrayIndexOutOfBoundsException e) {
 					System.err.println("Error: invalid number of message parts");
 				}
-			} while(!messageParts[0].equals("3"));
+			} while (!messageParts[0].equals("3"));
 		}
-		catch(BindException e) {
+		catch (BindException e) {
 			System.err.println("Bind error: address already in use");
 			System.exit(-1);
 		}
-		catch(IOException e) {
+		catch (IOException e) {
 			System.err.println("IO Error: unable to open input/output streams");
 			System.exit(-1);
 		}	
@@ -87,8 +87,8 @@ public class TCPServer {
 				serverSocket.close();
 				System.out.println("Connection closed");
 			}
-			catch(NullPointerException e) {}
-			catch(IOException e) {}
+			catch (NullPointerException e) {}
+			catch (IOException e) {}
 		}
 	}
 	
@@ -117,7 +117,6 @@ public class TCPServer {
 		tmp = msg.split(" ");
 		
 		return tmp;
-		
 	}
 	
 	private void sendMessage(String msg) {
@@ -127,10 +126,11 @@ public class TCPServer {
 			out.flush();
 			System.out.println("server>" + msg);
 		}
-		catch(IOException e){
+		catch (IOException e) {
 			System.err.println("Error: unable to send message");
 		}
 	}
+	
 	public static void main(String args[]) {
 		int port = SERVER_PORT;
 		
@@ -138,14 +138,14 @@ public class TCPServer {
 		if (args.length >= 1) {
 			try {
 				port = Integer.parseInt(args[0]);
-			} catch(NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				System.out.println("Invalid port: using default port (" + SERVER_PORT + ")");
 			}
 		}
 			
 		// init and run the server
 		TCPServer server = new TCPServer(port);
-		while(true){
+		while(true) {
 			server.run();
 		}
 	}
