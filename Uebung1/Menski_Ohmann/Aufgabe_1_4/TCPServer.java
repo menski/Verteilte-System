@@ -64,15 +64,20 @@ public class TCPServer {
 					}
 				}
 				catch(ClassNotFoundException e) {
-					System.err.println("Data received in unknown format");
+					System.err.println("Error: received data has unknown format");
 				}
 				catch(ArrayIndexOutOfBoundsException e) {
-					e.printStackTrace();
+					System.err.println("Error: invalid number of message parts");
 				}
 			} while(!messageParts[0].equals("3"));
 		}
+		catch(BindException e) {
+			System.err.println("Bind error: address already in use");
+			System.exit(-1);
+		}
 		catch(IOException e) {
-			e.printStackTrace();
+			System.err.println("IO Error: unable to open input/output streams");
+			System.exit(-1);
 		}	
 		finally {
 			// close connection once finished
@@ -82,9 +87,8 @@ public class TCPServer {
 				serverSocket.close();
 				System.out.println("Connection closed");
 			}
-			catch(IOException e) {
-				e.printStackTrace();
-			}
+			catch(NullPointerException e) {}
+			catch(IOException e) {}
 		}
 	}
 	
@@ -124,7 +128,7 @@ public class TCPServer {
 			System.out.println("server>" + msg);
 		}
 		catch(IOException e){
-			e.printStackTrace();
+			System.err.println("Error: unable to send message");
 		}
 	}
 	public static void main(String args[]) {

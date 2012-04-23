@@ -61,18 +61,21 @@ public class TCPClient {
 					}
 				}
 				catch(ClassNotFoundException e) {
-					System.err.println("Data received in unknown format");
+					System.err.println("Error: received data has unknown format");
 				}
 				catch(ArrayIndexOutOfBoundsException e) {
-					e.printStackTrace();
+					System.err.println("Error: invalid number of message parts");
 				}
 			} while(!messageParts[0].equals("2"));
 		}
+		catch(ConnectException e) {
+			System.err.println("Connection failed: refused");
+		}		
 		catch(UnknownHostException e) {
 			System.err.println("Connection failed: unknown host");
 		}
 		catch(IOException e) {
-			e.printStackTrace();
+			System.err.println("IO Error: unable to open input/output streams");
 		}
 		finally {
 			// close connection once finished
@@ -82,12 +85,8 @@ public class TCPClient {
 				clientSocket.close();
 				System.out.println("Connection closed");
 			}
-			catch(NullPointerException e) {
-				e.printStackTrace();
-			}
-			catch(IOException e) {
-				e.printStackTrace();
-			}
+			catch(NullPointerException e) {}
+			catch(IOException e) {}
 		}
 	}
 	
@@ -122,7 +121,7 @@ public class TCPClient {
 			System.out.println("client>" + msg);
 		}
 		catch(IOException e) {
-			e.printStackTrace();
+			System.err.println("Error: unable to send message");
 		}
 	}
 	
@@ -141,7 +140,7 @@ public class TCPClient {
 		
 		// exit if matriculation number is out of allowed bounds
 		if (matNum < MN_MIN || matNum > MN_MAX) {
-			System.err.println("Matriculation number has to be a positive integer in range [" + MN_MIN + "," + MN_MAX + "]");
+			System.err.println("Error: Matriculation number has to be a positive integer in range [" + MN_MIN + "," + MN_MAX + "]");
 			System.exit(-1);
 		}
 		
