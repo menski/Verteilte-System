@@ -16,5 +16,6 @@ a.out
 *~
 *.log
 *.tar.gz
+mail.txt
 tcp_client
 tcp_server
