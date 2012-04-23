@@ -10,7 +10,8 @@
 
 #define PORT 10041
 #define BUF_SIZE 1024
-#define MATNR_LIMIT 1000000
+#define MATNR_MIN 1
+#define MATNR_MAX 999999
 
 enum { ERROR = -1, SUCCESS };
 
@@ -22,11 +23,15 @@ int main(int argc, char *argv[]) {
 	
 	/* parse arguments */
 	if (argc < 3) {
-		errx(EX_USAGE, "Server address and Mat-NR. required\nusage: tcp_server SERVER_ADDR MAT_NR [PORT]");
+		errx(EX_USAGE, "Server address and Mat-NR. required\nusage: tcp_client SERVER_ADDR MAT_NR [PORT]");
 	}
 	addr_string = argv[1];
-	mat_nr = atoi(argv[2]) % MATNR_LIMIT;
+	mat_nr = atoi(argv[2]);
+	if (mat_nr < MATNR_MIN || mat_nr > MATNR_MAX) {
+		errx(EX_USAGE, "MAT_NR must be between %d and %d\nusage: tcp_client SERVER_ADDR MAT_NR [PORT]", MATNR_MIN, MATNR_MAX);
+	}
 	port = argc > 3 ? atoi(argv[3]) : PORT;
+
 
 	/* create client socket */
 	client_sockfd = socket(AF_INET, SOCK_STREAM, 0);
