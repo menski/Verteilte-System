@@ -17,7 +17,7 @@ else
 	ECHO=echo
 endif
 
-.PHONY: clean mrproper wrappers
+.PHONY: clean wrappers
 
 all: compile wrappers
 
@@ -35,10 +35,14 @@ wrappers:
 	chmod +x $(CLIENT_WRAPPER)
 	chmod +x $(SERVER_WRAPPER)
 
-clean: mrproper
-
-mrproper:
+clean: 
 	$(RM) *.class
 	$(RM) $(CLIENT_WRAPPER)
 	$(RM) $(SERVER_WRAPPER)
+	
+test: compile wrappers
+	@./$(SERVER_WRAPPER) &
+	@sleep 1
+	@./$(CLIENT_WRAPPER) 127.0.0.1 123456
+	
 	

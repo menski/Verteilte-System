@@ -23,14 +23,17 @@ public class TCPServer {
 	private ObjectInputStream in;
 	private String message;
 	private String[] messageParts;
+	private int port;
 	
-	public TCPServer() {}
+	public TCPServer(int port) {
+		this.port = port;
+	}
 	
 	public void run() {
 		try{
 			// create a server socket
-			serverSocket = new ServerSocket(SERVER_PORT, 10);
-			System.out.println("Opened socket on port " + SERVER_PORT);
+			serverSocket = new ServerSocket(port, 10);
+			System.out.println("Opened socket on port " + port);
 			
 			// wait for connection
 			System.out.println("Waiting for connection");
@@ -125,8 +128,19 @@ public class TCPServer {
 		}
 	}
 	public static void main(String args[]) {
+		int port = SERVER_PORT;
+		
+		// try to use custom port if given and valid, use default port otherwise
+		if (args.length >= 1) {
+			try {
+				port = Integer.parseInt(args[0]);
+			} catch(NumberFormatException e) {
+				System.out.println("Invalid port: using default port (" + SERVER_PORT + ")");
+			}
+		}
+			
 		// init and run the server
-		TCPServer server = new TCPServer();
+		TCPServer server = new TCPServer(port);
 		while(true){
 			server.run();
 		}

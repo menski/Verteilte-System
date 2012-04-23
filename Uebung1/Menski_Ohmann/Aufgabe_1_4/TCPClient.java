@@ -24,17 +24,19 @@ public class TCPClient {
 	private String[] messageParts;
 	private String host;
 	private String matriculationNumber;
+	private int port;
 	
- 	public TCPClient(String host, String mn) {
+ 	public TCPClient(String host, String mn, int port) {
  		this.host = host;
  		this.matriculationNumber = mn;
+ 		this.port = port;
  	}
 	
 	public void run() {
 		try {
 			// create a socket to connect to the server
-			clientSocket = new Socket(host, SERVER_PORT);
-			System.out.println("Connected to " + host + " on port " + SERVER_PORT);
+			clientSocket = new Socket(host, port);
+			System.out.println("Connected to " + host + " on port " + port);
 			
 			// get input and output streams
 			out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -143,8 +145,19 @@ public class TCPClient {
 			System.exit(-1);
 		}
 		
+		int port = SERVER_PORT;
+		
+		// try to use custom port if given and valid, use default port otherwise
+		if (args.length >= 3) {
+			try {
+				port = Integer.parseInt(args[2]);
+			} catch(NumberFormatException e) {
+				System.out.println("Invalid port: using default port (" + SERVER_PORT + ")");
+			}
+		}
+		
 		// init and run the client
-		TCPClient client = new TCPClient(args[0], intToString(matNum, MN_DIGITS));
+		TCPClient client = new TCPClient(args[0], intToString(matNum, MN_DIGITS), port);
 		client.run();
 	}
 }
