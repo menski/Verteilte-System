@@ -14,3 +14,7 @@
 a.out
 *.class
 *~
+*.log
+*.tar.gz
+tcp_client
+tcp_server
