@@ -47,7 +47,7 @@ int main(int argc, char *argv[]) {
 	/* set server address values */
 	server_address.sin_family = AF_INET;
 	server_address.sin_addr.s_addr= inet_addr(addr_string);
-	server_address.sin_port = port;
+	server_address.sin_port = htons(port);
 
 	/* bind socket to address */
 	result = bind(server_sockfd, (struct sockaddr *) &server_address, sizeof(server_address));
