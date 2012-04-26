@@ -1,0 +1,31 @@
+Verteilte Systeme Einführung 12.04.2012
+=======================================
+
+VS Erscheinungsformen
+---------------------
+
+								C l o u d
+
+Smart		Sensor-		Client-		Cluster		Grid
+Dust		netze		Server		Computing	Computing
+
+<------------------------------------------------------->
+						HW-Dimensionen
+						
+Kooperation/Interaktion
+-----------------------
+
+Zentral <---------->	verteilt
+						'-> Organic Computing
+						'-> P2P
+						
+
+*-------------------------------*
+| Verteilte Anwendungen			|
+|-------------------------------|
+| Middleware					| Java RMI, RPC, Resourcenmenagement
+|-------------------------------|
+| BS 	  :     Kommunikations- | z.B. Socket
+|		  :		komponente		|
+*-------------------------------*
+
