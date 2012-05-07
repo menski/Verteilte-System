@@ -1,0 +1,82 @@
+\documentclass[german,12pt,a4paper]{article}
+\usepackage{fullpage}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
+\usepackage{subfig}
+\usepackage[colorlinks=false, pdfborder={1 0 0}]{hyperref}
+
+
+\pagestyle{plain}
+\pagenumbering{arabic}
+\frenchspacing
+
+\newcommand{\comments}[1]{}
+\renewcommand{\baselinestretch}{1.55}
+
+%Redefine the first level
+\renewcommand{\theenumi}{\textbf{\alph{enumi})}}
+\renewcommand{\labelenumi}{\theenumi}
+
+\begin{document}
+
+\title{\textbf{Verteilte Systeme SS2012 -- Übung 2}}
+\author{Sebastian Menski (734272), Martin Ohmann (734801) \\ \texttt{\{menski,ohmann\}@uni-potsdam.de}}
+\date{\today}
+
+\maketitle
+
+\section*{Aufgabe 2.1}
+
+\begin{enumerate}
+
+	\item Das Interface eth0 ist direkt an das private Netzwerk \texttt{10.3.5.0/24} angeschlossen und
+	besitzt eine IP Adresse in diesem Netzwerk. Daher soll alle Paket, welche ebenfalls an eine
+	Adresse in diesem Netzwerk gesendet werden über das Interface eth0 verarbeitet werden. Der 2.
+	Eintrag, beginnend mit \texttt{0.0.0.0} steht für die \textit{default} Route. Das bedeutet, dass
+	alle Paket, welche nicht an eine Adresse in dem durch die 1. Regel abgedeckten Netzwerk gesendet
+	werden, an den Standard Gateway mit der Adresse \texttt{10.3.5.254} gesendet werden, welcher
+	ebenfalls über das Interface eth0 erreichbar ist.
+
+	\item Beide Programme nutzen ICMP Nachrichten. Ping sendet ein \textit{Echo Request}-Paket und
+	erhält entsprechende Antwort ob ein Rechner verfügbar ist. Traceroute ermittelt alle Knoten auf
+	der Route zum Ziel. Dazu werden ebenfalls mehrere ICMP-Paket gesendet, jedoch wird die Funktion
+	der TTL genutzt. Das heißt, das erste gesendete Paket enthält eine TTL von 1, weshalb es schon vom
+	ersten Knoten auf der Route verworfen wird und dieser eine Fehlermeldung mit seiner Adresse
+	zurückschickt. Dies wird mit steigender TTL wiederholt bis das Ziel erreicht wurde. Somit können
+	alle Knoten auf der Route erkannt werden.
+
+	\item Mit dem Programm \texttt{route} können die IP-Routing-Tabellen des Kernels verändert werden,
+	somit der komplette Netzwerk-Traffics des Rechners umgeleitet werden, was nicht jedem Nutzer
+	möglich sein sollte. Mit dem Programm \texttt{ifconfig} kann zum Konfigurieren der
+	Netzwerkschnittstellen genutzt werden, welches ebenfalls eine Manipulation oder Störung des
+	gesamten Netzwerk-Traffics ermöglicht, was ebenfalls nicht jedem Nutzer möglich sein sollte.
+
+\end{enumerate}
+
+
+\section*{Aufgabe 2.2}
+\begin{table}[h]
+\begin{tabular}{|c|c|r|r|r|}\hline
+Netzklasse & Adressbereich               & Hostlänge & Netze      & Hosts pro Netz \\\hline
+Klasse A   &   0.0.0.0 – 127.255.255.255 & 24 Bit    &	      128	& 16.777.214     \\
+Klasse B   & 128.0.0.0 – 191.255.255.255 & 16 Bit    &	   16.384 &	    65.534     \\
+Klasse C   & 192.0.0.0 – 223.255.255.255 & 	8 Bit    &	2.097.152	&        254     \\\hline
+\end{tabular}
+\caption{Quelle: \url{http://de.wikipedia.org/wiki/Netzklasse}}
+\end{table}
+
+
+\section*{Aufgabe 2.3}
+
+\section*{Aufgabe 2.4}
+
+\end{document}
