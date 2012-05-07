@@ -39,7 +39,7 @@
 \begin{enumerate}
 
 	\item Das Interface eth0 ist direkt an das private Netzwerk \texttt{10.3.5.0/24} angeschlossen und
-	besitzt eine IP Adresse in diesem Netzwerk. Daher soll alle Paket, welche ebenfalls an eine
+	besitzt eine IP Adresse in diesem Netzwerk. Daher sollen alle Paket, welche ebenfalls an eine
 	Adresse in diesem Netzwerk gesendet werden über das Interface eth0 verarbeitet werden. Der 2.
 	Eintrag, beginnend mit \texttt{0.0.0.0} steht für die \textit{default} Route. Das bedeutet, dass
 	alle Paket, welche nicht an eine Adresse in dem durch die 1. Regel abgedeckten Netzwerk gesendet
@@ -56,7 +56,7 @@
 
 	\item Mit dem Programm \texttt{route} können die IP-Routing-Tabellen des Kernels verändert werden,
 	somit der komplette Netzwerk-Traffics des Rechners umgeleitet werden, was nicht jedem Nutzer
-	möglich sein sollte. Mit dem Programm \texttt{ifconfig} kann zum Konfigurieren der
+	möglich sein sollte. Das Programm \texttt{ifconfig} kann zum Konfigurieren der
 	Netzwerkschnittstellen genutzt werden, welches ebenfalls eine Manipulation oder Störung des
 	gesamten Netzwerk-Traffics ermöglicht, was ebenfalls nicht jedem Nutzer möglich sein sollte.
 
@@ -84,6 +84,26 @@ Transportschicht überprüft werden muss. Dies kann jedoch erst am Ziel geschehe
 erhalten wurden.
 
 
-\section*{Aufgabe 2.4}
+\section*{Aufgabe 2.4} 
+
+\begin{itemize}
+
+	\item Laut RFC müsste eine Überprüfung ob der \texttt{container} eine Teekanne (teapot) ist
+	stattfinden, welche auch in Funktion \texttt{insert(container, water)} stattfinden könnte. Fehlt
+	diese Überprüfung widerspricht dies jedoch nicht dem RFC, da diese Überprüfung bzw. deren
+	Rückgabewert als \texttt{SHOULD} im RFC markiert ist, welches besagt, dass das Verhalten
+	empfohlen ist, es jedoch gut begründete Ausnahmen geben kann. Ob es sich bei dem Code jedoch um
+	eine gut durchdachte Implementation mit einer begründetet Ausnahme vom RFC handelt, ist auf Grund
+	der mangelnden Kommentierung des Codes nicht nachzuvollziehen und eine Überprüfung auf ein
+	Teekanne nach dem RFC ist zu empfehlen. Der Rückgabewert bzw. in diesem Fall der Response-Body
+	ist nicht ersichtlich, jedoch auch beliebig zu wählen, da dieser im RFC als \texttt{MAY} markiert
+	ist. Dies bedeute die Angaben sind optional und der Implementierung überlassen.
+
+	\item Der Unterschied zwischen \texttt{SHALL} und \texttt{SHOULD} ist, dass Punkte, welche als
+	\texttt{SHALL} markiert sind immer verpflichtend und erforderlich sind. Bei Punkten, welche als
+	\texttt{SHOULD} markiert sind kann es begründete Ausnahmen geben, trotzdem sind sie im Normalfall
+	gefordert und sollte nur in gut durchdachten Situationen verändert werden.
+
+\end{itemize}
 
 \end{document}
