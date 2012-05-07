@@ -47,12 +47,12 @@
 	ebenfalls über das Interface eth0 erreichbar ist.
 
 	\item Beide Programme nutzen ICMP Nachrichten. Ping sendet ein \textit{Echo Request}-Paket und
-	erhält entsprechende Antwort ob ein Rechner verfügbar ist. Traceroute ermittelt alle Knoten auf
-	der Route zum Ziel. Dazu werden ebenfalls mehrere ICMP-Paket gesendet, jedoch wird die Funktion
-	der TTL genutzt. Das heißt, das erste gesendete Paket enthält eine TTL von 1, weshalb es schon vom
-	ersten Knoten auf der Route verworfen wird und dieser eine Fehlermeldung mit seiner Adresse
+	erhält entsprechende Antwort ob ein Rechner verfügbar ist. Traceroute ermittelt alle Hops auf der
+	Route zum Ziel. Dazu werden ebenfalls mehrere ICMP-Paket gesendet, jedoch wird die Funktion der
+	TTL genutzt. Das heißt, das erste gesendete Paket enthält eine TTL von 1, weshalb es schon vom
+	ersten Hop auf der Route verworfen wird und dieser eine Fehlermeldung mit seiner Adresse
 	zurückschickt. Dies wird mit steigender TTL wiederholt bis das Ziel erreicht wurde. Somit können
-	alle Knoten auf der Route erkannt werden.
+	alle Hops auf der Route erkannt werden.
 
 	\item Mit dem Programm \texttt{route} können die IP-Routing-Tabellen des Kernels verändert werden,
 	somit der komplette Netzwerk-Traffics des Rechners umgeleitet werden, was nicht jedem Nutzer
@@ -65,17 +65,24 @@
 
 \section*{Aufgabe 2.2}
 \begin{table}[h]
-\begin{tabular}{|c|c|r|r|r|}\hline
-Netzklasse & Adressbereich               & Hostlänge & Netze      & Hosts pro Netz \\\hline
-Klasse A   &   0.0.0.0 – 127.255.255.255 & 24 Bit    &	      128	& 16.777.214     \\
-Klasse B   & 128.0.0.0 – 191.255.255.255 & 16 Bit    &	   16.384 &	    65.534     \\
-Klasse C   & 192.0.0.0 – 223.255.255.255 & 	8 Bit    &	2.097.152	&        254     \\\hline
-\end{tabular}
-\caption{Quelle: \url{http://de.wikipedia.org/wiki/Netzklasse}}
+	\begin{tabular}{|c|c|r|r|r|}\hline
+		Netzklasse & Adressbereich               & Hostlänge & Netze      & Hosts pro Netz \\\hline
+		Klasse A   &   0.0.0.0 – 127.255.255.255 & 24 Bit    &	      128	& 16.777.214     \\
+		Klasse B   & 128.0.0.0 – 191.255.255.255 & 16 Bit    &	   16.384 &	    65.534     \\
+		Klasse C   & 192.0.0.0 – 223.255.255.255 & 	8 Bit    &	2.097.152	&        254     \\\hline
+	\end{tabular}
+	\caption{Quelle: \url{http://de.wikipedia.org/wiki/Netzklasse}}
 \end{table}
 
 
 \section*{Aufgabe 2.3}
+Da sich bei jedem Hop auf der Route eines IP Pakets die TTL verändert (dekrementiert wird) muss
+jedesmal eine neue Checksum für das Paket ermittelt werden. Daher ist der Rechenaufwand kleiner,
+wenn die Checksum nur über den Header berechnet wird. Außerdem führt dies dazu, dass sich die
+Checksum pro Hop genau um 1 erhöht. Der Nachteil ist, dass die Payload von der überliegenden
+Transportschicht überprüft werden muss. Dies kann jedoch erst am Ziel geschehen und wenn alle Pakete
+erhalten wurden.
+
 
 \section*{Aufgabe 2.4}
 
