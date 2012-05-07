@@ -42,20 +42,20 @@
 	besitzt eine IP Adresse in diesem Netzwerk. Daher sollen alle Paket, welche ebenfalls an eine
 	Adresse in diesem Netzwerk gesendet werden über das Interface eth0 verarbeitet werden. Der 2.
 	Eintrag, beginnend mit \texttt{0.0.0.0} steht für die \textit{default} Route. Das bedeutet, dass
-	alle Paket, welche nicht an eine Adresse in dem durch die 1. Regel abgedeckten Netzwerk gesendet
+	alle Pakete, welche nicht an eine Adresse in dem durch die 1. Regel abgedeckten Netzwerk gesendet
 	werden, an den Standard Gateway mit der Adresse \texttt{10.3.5.254} gesendet werden, welcher
 	ebenfalls über das Interface eth0 erreichbar ist.
 
 	\item Beide Programme nutzen ICMP Nachrichten. Ping sendet ein \textit{Echo Request}-Paket und
 	erhält entsprechende Antwort ob ein Rechner verfügbar ist. Traceroute ermittelt alle Hops auf der
-	Route zum Ziel. Dazu werden ebenfalls mehrere ICMP-Paket gesendet, jedoch wird die Funktion der
+	Route zum Ziel. Dazu werden ebenfalls mehrere ICMP-Pakete gesendet, jedoch wird die Funktion der
 	TTL genutzt. Das heißt, das erste gesendete Paket enthält eine TTL von 1, weshalb es schon vom
 	ersten Hop auf der Route verworfen wird und dieser eine Fehlermeldung mit seiner Adresse
 	zurückschickt. Dies wird mit steigender TTL wiederholt bis das Ziel erreicht wurde. Somit können
 	alle Hops auf der Route erkannt werden.
 
 	\item Mit dem Programm \texttt{route} können die IP-Routing-Tabellen des Kernels verändert werden,
-	somit der komplette Netzwerk-Traffics des Rechners umgeleitet werden, was nicht jedem Nutzer
+	womit der komplette Netzwerk-Traffic des Rechners umgeleitet werden kann, was nicht jedem Nutzer
 	möglich sein sollte. Das Programm \texttt{ifconfig} kann zum Konfigurieren der
 	Netzwerkschnittstellen genutzt werden, welches ebenfalls eine Manipulation oder Störung des
 	gesamten Netzwerk-Traffics ermöglicht, was ebenfalls nicht jedem Nutzer möglich sein sollte.
@@ -93,7 +93,7 @@ erhalten wurden.
 	diese Überprüfung widerspricht dies jedoch nicht dem RFC, da diese Überprüfung bzw. deren
 	Rückgabewert als \texttt{SHOULD} im RFC markiert ist, welches besagt, dass das Verhalten
 	empfohlen ist, es jedoch gut begründete Ausnahmen geben kann. Ob es sich bei dem Code jedoch um
-	eine gut durchdachte Implementation mit einer begründetet Ausnahme vom RFC handelt, ist auf Grund
+	eine gut durchdachte Implementation mit einer begründeten Ausnahme vom RFC handelt, ist auf Grund
 	der mangelnden Kommentierung des Codes nicht nachzuvollziehen und eine Überprüfung auf ein
 	Teekanne nach dem RFC ist zu empfehlen. Der Rückgabewert bzw. in diesem Fall der Response-Body
 	ist nicht ersichtlich, jedoch auch beliebig zu wählen, da dieser im RFC als \texttt{MAY} markiert
@@ -102,7 +102,7 @@ erhalten wurden.
 	\item Der Unterschied zwischen \texttt{SHALL} und \texttt{SHOULD} ist, dass Punkte, welche als
 	\texttt{SHALL} markiert sind immer verpflichtend und erforderlich sind. Bei Punkten, welche als
 	\texttt{SHOULD} markiert sind kann es begründete Ausnahmen geben, trotzdem sind sie im Normalfall
-	gefordert und sollte nur in gut durchdachten Situationen verändert werden.
+	gefordert und sollten nur in gut durchdachten Situationen verändert werden.
 
 \end{itemize}
 
