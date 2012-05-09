@@ -62,7 +62,7 @@ public class UDPServer {
 			multicastThread.start();
 			broadcastThread.start();          
 			
-			System.out.println("Just waiting for messages");
+			System.out.println("server> Just waiting for messages");
 			//Just wait until the Server is closed          
 			while (true) {}
 		} catch (Exception e) {
@@ -91,9 +91,10 @@ public class UDPServer {
 	//If a message was received over one Socket the Thread will call this function handling the connection type and the received packet
 	public void receivedMessage(int type, DatagramPacket packet) {               
 		String message = new String(packet.getData());
-		System.out.println("received message:" + message);
 		
 		if (message.substring(0,1).equals("1") && message.length() >= 8) {
+			System.out.println("server> Received Message: " + message);
+			
 			//handle the Matrikelnummer
 			String matrikelnummer = message.substring(2,8);  
 			
@@ -114,7 +115,7 @@ public class UDPServer {
 	public void sendMessage(String msg, int type, DatagramPacket inPacket) {     
 		try {
 			byte[] buffer = msg.getBytes();
-			System.out.println("Sending Message" + msg);
+			System.out.println("server> Sending Message: " + msg);
 			
 			//Prepare the DatagramPacket
 			DatagramPacket packet;

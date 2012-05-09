@@ -22,7 +22,7 @@ public class UDPListenerRunnable implements Runnable {
 			try {
 				byte[] buffer = new byte[65000];
 				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-				System.out.println("Listening for Messages of type: "+type);
+				System.out.println("server-listener> Listening for Messages of type: " + type);
 				socket.receive(packet);
 				parent.receivedMessage(type, packet);
 			} catch (Exception e){

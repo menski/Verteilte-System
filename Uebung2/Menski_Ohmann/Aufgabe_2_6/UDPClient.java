@@ -33,6 +33,7 @@ public class UDPClient {
 	private int port;
 	private int transmissionType;
 	private String matriculationNumber;
+	private String message;
 	private InetAddress serverIp;
 	
 	private DatagramSocket unicastSocket;
@@ -67,10 +68,13 @@ public class UDPClient {
 		
 		//Transmit messages
 		try{      
-			System.out.println("Sending Matrikelnumber");
-			sendMessage("1 " + matriculationNumber, transmissionType);
+			System.out.println("client> Sending matriculation number: " + matriculationNumber);
+			message = "1 " + matriculationNumber;
+			sendMessage(message, transmissionType);
+			
 			String response = receiveMessage(transmissionType);
-			System.out.println("Received Message: " + response);        
+			
+			System.out.println("client> Received Message: " + response);        
 		} catch(IOException e) {
 			System.err.println("data received in unknown format");
 		} finally {
@@ -102,7 +106,7 @@ public class UDPClient {
 			broadcastSocket.send(packet);
 		}
 		
-		System.out.println("Sending Message:" + msg);
+		System.out.println("client> Sending Message: " + msg);
 	}
 	
 	private String receiveMessage(int type) throws IOException {     
@@ -113,6 +117,8 @@ public class UDPClient {
 		if (type == UNICAST) {
 			unicastSocket.receive(packet);
 		} else if (type == MULTICAST) {
+			// receive own package and another
+			multicastSocket.receive(packet);
 			multicastSocket.receive(packet);
 		} else if (type == BROADCAST) {
 			broadcastSocket.receive(packet);
