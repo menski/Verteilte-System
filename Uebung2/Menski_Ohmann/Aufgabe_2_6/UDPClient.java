@@ -17,13 +17,12 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public class UDPClient {
 
 	public static final int GROUP_NR = 16;
-	public static int UNICAST = 1;
-	public static int MULTICAST = 2;
-	public static int BROADCAST = 3; 
+	public static final int UNICAST = 1;
+	public static final int MULTICAST = 2;
+	public static final int BROADCAST = 3; 
 	public static final int MN_MIN = 1;
 	public static final int MN_MAX = 999999;
 	public static final int CLIENT_PORT = 10041;
@@ -32,8 +31,10 @@ public class UDPClient {
 	
 	private int port;
 	private int transmissionType;
+	
 	private String matriculationNumber;
 	private String message;
+	
 	private InetAddress serverIp;
 	
 	private DatagramSocket unicastSocket;
@@ -53,7 +54,8 @@ public class UDPClient {
 	}
 	
 	public void run() {
-		try {    
+		try { 
+			// init socket  
 			if (transmissionType == UNICAST) {
 				unicastSocket = new DatagramSocket();
 			} else if (transmissionType == MULTICAST) {
@@ -62,23 +64,21 @@ public class UDPClient {
 			} else if (transmissionType == BROADCAST) {
 				broadcastSocket = new DatagramSocket();
 			}
-		} catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		//Transmit messages
 		try{      
-			System.out.println("client> Sending matriculation number: " + matriculationNumber);
+			// transmit message
 			message = "1 " + matriculationNumber;
 			sendMessage(message, transmissionType);
 			
-			String response = receiveMessage(transmissionType);
-			
-			System.out.println("client> Received Message: " + response);        
+			// receive message
+			receiveMessage(transmissionType);       
 		} catch(IOException e) {
-			System.err.println("data received in unknown format");
+			System.err.println("Error: Data received in unknown format");
 		} finally {
-			//Verbindung(en) schließen     
+			// close connection    
 			try {
 				if (transmissionType == UNICAST){
 					unicastSocket.close();
@@ -96,12 +96,13 @@ public class UDPClient {
 		byte[] buffer = msg.getBytes();
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverIp, port+type+GROUP_NR);           
 		
-		//Paket absenden
+		// send packet
 		if (type == UNICAST) {
 			unicastSocket.send(packet);
 		} else if (type == MULTICAST) {
 			multicastSocket.send(packet);
 		} else if (type == BROADCAST) {
+			// use broadcast address here
 			packet.setAddress(InetAddress.getByName(BROADCAST_ADDRESS));
 			broadcastSocket.send(packet);
 		}
@@ -109,25 +110,32 @@ public class UDPClient {
 		System.out.println("client> Sending Message: " + msg);
 	}
 	
-	private String receiveMessage(int type) throws IOException {     
+	private void receiveMessage(int type) throws IOException {     
 		byte[] buffer = new byte[65000];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		
-		//Paket empfangen und daten auslesen
+		// receive packet and contents
 		if (type == UNICAST) {
 			unicastSocket.receive(packet);
 		} else if (type == MULTICAST) {
-			// receive own package and another
-			multicastSocket.receive(packet);
-			multicastSocket.receive(packet);
+			// wait for server response, omit "own" message
+			String msg;
+			do {
+				multicastSocket.receive(packet);
+				msg = new String(buffer);
+			} while (!msg.substring(0,1).equals("2") && msg.length() >= 8);
 		} else if (type == BROADCAST) {
 			broadcastSocket.receive(packet);
 		}
+		String response = new String(buffer);
 		
-		return new String(buffer);
+		System.out.println("client> Received Message: " + response); 
+		System.out.println("client> == Matriculation number: " + response.substring(2,8));
+		System.out.println("client> == Random number: " + response.substring(9,16));
 	}
 	
 	public static boolean validateIpAddress(final String ip) {
+		// pattern to validate ip-addresses
 		final String IP_PATTERN = 
 			"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
 			"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
@@ -156,6 +164,7 @@ public class UDPClient {
 		String ipAddress;
 		String port;
 		
+		// since broadcast uses one arg less, we have to check for it
 		if (transmissionType.equalsIgnoreCase("broadcast")) {
 			ipAddress = BROADCAST_ADDRESS;
 			port = args[2];
@@ -208,7 +217,7 @@ public class UDPClient {
 			clientPort = CLIENT_PORT;
 		}
 		
-		//Start the client
+		// start the client
 		UDPClient client = new UDPClient(Integer.toString(matNum), transmission, ipAddress, clientPort);	
 		client.run();
 	}

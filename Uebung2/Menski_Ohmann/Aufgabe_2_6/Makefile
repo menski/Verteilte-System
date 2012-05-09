@@ -24,24 +24,26 @@ compile: $(JAVAFILES)
 	$(JAVAC) $(JAVAFILES)
 	
 wrappers:	
-	$(ECHO) "#!/bin/sh" > $(CLIENT_WRAPPER)
-	$(ECHO) -n "java $(CLIENT) $$" >> $(CLIENT_WRAPPER) 
-	$(ECHO) "@" >> $(CLIENT_WRAPPER)
+	@$(ECHO) "#!/bin/sh" > $(CLIENT_WRAPPER)
+	@$(ECHO) -n "java $(CLIENT) $$" >> $(CLIENT_WRAPPER) 
+	@$(ECHO) "@" >> $(CLIENT_WRAPPER)
 	
-	$(ECHO) "#!/bin/sh" > $(SERVER_WRAPPER)
-	$(ECHO) -n "java $(SERVER) $$" >> $(SERVER_WRAPPER) 
-	$(ECHO) "@" >> $(SERVER_WRAPPER)
-	chmod +x $(CLIENT_WRAPPER)
-	chmod +x $(SERVER_WRAPPER)
+	@$(ECHO) "#!/bin/sh" > $(SERVER_WRAPPER)
+	@$(ECHO) -n "java $(SERVER) $$" >> $(SERVER_WRAPPER) 
+	@$(ECHO) "@" >> $(SERVER_WRAPPER)
+	@chmod +x $(CLIENT_WRAPPER)
+	@chmod +x $(SERVER_WRAPPER)
 
 clean: 
-	$(RM) *.class
-	$(RM) $(CLIENT_WRAPPER)
-	$(RM) $(SERVER_WRAPPER)
+	@$(RM) *.class
+	@$(RM) $(CLIENT_WRAPPER)
+	@$(RM) $(SERVER_WRAPPER)
 	
 test: compile wrappers
-	@./$(SERVER_WRAPPER) 10041 &
+	./$(SERVER_WRAPPER) 10041 &
 	@sleep 1
-	@./$(CLIENT_WRAPPER) 123456 unicast 127.0.0.1 10041
-	
-	
+	./$(CLIENT_WRAPPER) 123456 unicast 127.0.0.1 10041
+
+	@$(ECHO) ""
+	@$(ECHO) "---> Dont't forget to kill UDPServer <---"	
+

@@ -41,33 +41,33 @@ public class UDPServer {
 	
 	public void run() {
 		try {                    
-			//First create the UDP Sockets
+			// first create the UDP sockets
 			unicastSocket = new DatagramSocket (port+UNICAST+GROUP_NR);
 			multicastSocket = new MulticastSocket (port+MULTICAST+GROUP_NR);
 			multicastSocket.joinGroup(InetAddress.getByName(MULTICAST_ADDRESS));
 			broadcastSocket = new DatagramSocket (port+BROADCAST+GROUP_NR);
 			
-			//Then create Runnables for each Socket, which will be executed within the threads
+			// then create runnables for each socket, which will be executed within the threads
 			unicastRunnable = new UDPListenerRunnable(unicastSocket, this, UNICAST);
 			multicastRunnable = new UDPListenerRunnable(multicastSocket, this, MULTICAST);
 			broadcastRunnable = new UDPListenerRunnable(broadcastSocket, this, BROADCAST);
 			
-			//Now create the listening Threads
+			// now create the listening threads
 			unicastThread = new Thread(unicastRunnable);
 			multicastThread = new Thread(multicastRunnable);
 			broadcastThread = new Thread(broadcastRunnable); 
 			
-			//Starting the listening Threads
+			// starting the listening threads
 			unicastThread.start();
 			multicastThread.start();
 			broadcastThread.start();          
 			
 			System.out.println("server> Just waiting for messages");
-			//Just wait until the Server is closed          
+			// just wait until the server is closed          
 			while (true) {}
 		} catch (Exception e) {
 			e.printStackTrace();
-			//In this case stop the Threads and close the Sockets
+			// in this case stop the threads and close the sockets
 			unicastRunnable.stopRunning();
 			multicastRunnable.stopRunning();
 			broadcastRunnable.stopRunning();
@@ -77,7 +77,7 @@ public class UDPServer {
 			broadcastSocket.close();
 			return;
 		} finally {
-			//Stop the Threads and close the Sockets
+			// stop the threads and close the sockets
 			unicastRunnable.stopRunning();
 			multicastRunnable.stopRunning();
 			broadcastRunnable.stopRunning();
@@ -88,17 +88,19 @@ public class UDPServer {
 		} 	  
 	}
 	
-	//If a message was received over one Socket the Thread will call this function handling the connection type and the received packet
 	public void receivedMessage(int type, DatagramPacket packet) {               
 		String message = new String(packet.getData());
 		
+		// don't respond to "wrong" packets
 		if (message.substring(0,1).equals("1") && message.length() >= 8) {
 			System.out.println("server> Received Message: " + message);
 			
-			//handle the Matrikelnummer
+			// handle matriculation number
 			String matrikelnummer = message.substring(2,8);  
 			
-			//Calculate the random value
+			System.out.println("server> == Matriculation number: " + matrikelnummer);
+			
+			// calculate the random value
 			Random random = new Random();
 			int ran = random.nextInt(9999999);
 			String ranS = String.valueOf(ran);
@@ -106,18 +108,19 @@ public class UDPServer {
 			while (ranS.length() < 7){
 				ranS = "0" + ranS;
 			}
-			//Send the message
+			System.out.println("server> == Setting random number: " + ranS);
+			
+			// send tresponse
 			sendMessage("2 " + matrikelnummer + " " + ranS, type, packet);          
 		}    
 	}
 	
-	//Sends Messages to clients
 	public void sendMessage(String msg, int type, DatagramPacket inPacket) {     
 		try {
 			byte[] buffer = msg.getBytes();
 			System.out.println("server> Sending Message: " + msg);
 			
-			//Prepare the DatagramPacket
+			// prepare packet
 			DatagramPacket packet;
 			if (type == UNICAST) {
 				packet = new DatagramPacket(buffer, buffer.length, inPacket.getAddress(), inPacket.getPort());
@@ -127,6 +130,7 @@ public class UDPServer {
 				packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(BROADCAST_ADDRESS), inPacket.getPort());
 			}
 			
+			// send packet
 			(new DatagramSocket()).send(packet);
 			
 		} catch (Exception e){
@@ -135,6 +139,7 @@ public class UDPServer {
 	}
 	
 	public static void main(String[] args) {
+		// validate args
 		if (args.length < 1) {
 			System.err.println("Usage: java UDPServer <port>");
 			System.exit(-1);
@@ -151,6 +156,7 @@ public class UDPServer {
 			serverPort = SERVER_PORT;
 		}    
 		
+		// start the server
 		UDPServer server = new UDPServer(serverPort);	 
 		server.run();
 	}
