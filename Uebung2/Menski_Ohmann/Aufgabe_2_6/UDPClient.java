@@ -1,9 +1,9 @@
-package udpclient;
-
 /**
- * @author Sebastian
+ * UDP Client
+ * 
+ * @author Sebastian Menski (734272) <menski@uni-potsdam.de>
+ * @author Martin Ohmann (734801) <ohmann@uni-potsdam.de>
  */
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -14,98 +14,196 @@ import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class UDPClient {
-  private int portNummer = 10041;
-  private InetAddress serverIp;
-  //  Hier die Sockets Eintragen
-  ObjectOutputStream out;
-  ObjectInputStream in;
-  String message;
-  
-  public static int UNICAST = 1;
-  public static int MULTICAST = 2;
-  public static int BROADCAST = 3; 
-  void run(String matrikelNR, int transmissionType, String ip, int port){
-    portNummer = port;
-    
-    try {
-      serverIp = InetAddress.getByName(ip);
-    } catch (UnknownHostException ex) {
-      Logger.getLogger(UDPClient.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    
-    try {    
-      if (transmissionType == UNICAST){
-        //Hier die Netzwerk Verbindung einbauen
-        System.out.println("SocketIP:"+serverIp.getHostAddress());
-        //Socket erzeugen
-      }
 
-      else if (transmissionType == MULTICAST){
-        //Socket erzeugen
-      }
-
-      else if (transmissionType == BROADCAST){
-        //Socket erzeugen
-	   }
-    } catch (Exception e ){
-        e.printStackTrace();
-    }
-    
-    //Transmit messages
-    try{      
-        System.out.println("Sending Matrikelnumber");
-        sendMessage("1 "+matrikelNR, transmissionType);
-        String response = receiveMessage(transmissionType);
-        System.out.println("Received Message: "+response);        
-    } catch(IOException classNot){
-        System.err.println("data received in unknown format");
-    } 
-    
-    finally{
-        //Verbindung(en) schlieﬂen              
-    }
-  }
-    
-  void sendMessage(String msg, int transmissionType) throws IOException {      
-      byte[] buffer = msg.getBytes();
-      DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverIp, portNummer+transmissionType+3);           
-	  //Paket absenden
-      System.out.println("Sending Message" + msg);
+	public static final int GROUP_NR = 16;
+	public static int UNICAST = 1;
+	public static int MULTICAST = 2;
+	public static int BROADCAST = 3; 
+	public static final int MN_MIN = 1;
+	public static final int MN_MAX = 999999;
+	public static final int CLIENT_PORT = 10041;
+	public static final String DEFAULT_ADDRESS = "127.0.0.1";
+	public static final String BROADCAST_ADDRESS = "255.255.255.255";
+	
+	private int port;
+	private int transmissionType;
+	private String matriculationNumber;
+	private InetAddress serverIp;
+	
+	private DatagramSocket unicastSocket;
+	private MulticastSocket multicastSocket;
+	private DatagramSocket broadcastSocket;
+	
+	public UDPClient(String mn, int transmissionType, String ip, int port) {
+		this.port = port;
+		this.transmissionType = transmissionType;
+		this.matriculationNumber = mn;
+		
+		try {
+			this.serverIp = InetAddress.getByName(ip);
+		} catch (UnknownHostException ex) {
+			Logger.getLogger(UDPClient.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
-    
-    String receiveMessage(int transmissionType) throws IOException {     
-      byte[] buffer = new byte[65000];
-      DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-      //Paket empfangen und daten auslesen
-      return new String(buffer);
-    }
-
-  public static void main(String[] args) {    
-    if (args[2]==null){
-      System.out.println("Please start with Matrikelnummer Transmissiontype ip ports as parameter");
-      return;
-    }
-    
-    // First handle the input parameters
-    String matrikelnummer = args[0];
-    String transmissiontype = args[1];
-    int transmission = -1;
-    if (transmissiontype.equalsIgnoreCase("unicast"))   transmission = UDPClient.UNICAST;
-    else if (transmissiontype.equalsIgnoreCase("multicast"))   transmission = UDPClient.MULTICAST;
-    else if (transmissiontype.equalsIgnoreCase("broadcast"))   transmission = UDPClient.BROADCAST;
-    else {
-      System.out.println("Transmissiontype must be either UNICAST, MULTICAST or BROADCAST");
-      return;
-    }
-    String ip;
-    int port;
-    //Parameter einlesen ggf. IP adressen setzen
-    
-	//Start the client
-    UDPClient client = new UDPClient();	
-    client.run(matrikelnummer, transmission, ip, port);
-  }
+	
+	public void run() {
+		try {    
+			if (transmissionType == UNICAST) {
+				unicastSocket = new DatagramSocket();
+			} else if (transmissionType == MULTICAST) {
+				multicastSocket = new MulticastSocket(port+MULTICAST+GROUP_NR);
+				multicastSocket.joinGroup(serverIp);
+			} else if (transmissionType == BROADCAST) {
+				broadcastSocket = new DatagramSocket();
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		//Transmit messages
+		try{      
+			System.out.println("Sending Matrikelnumber");
+			sendMessage("1 " + matriculationNumber, transmissionType);
+			String response = receiveMessage(transmissionType);
+			System.out.println("Received Message: " + response);        
+		} catch(IOException e) {
+			System.err.println("data received in unknown format");
+		} finally {
+			//Verbindung(en) schlie√üen     
+			try {
+				if (transmissionType == UNICAST){
+					unicastSocket.close();
+				} else if (transmissionType == MULTICAST){
+					multicastSocket.close();    		
+					multicastSocket.leaveGroup(serverIp);
+				} else if (transmissionType == BROADCAST){
+					broadcastSocket.close();
+				}
+			} catch (Exception e) {}
+		}
+	}
+	
+	private void sendMessage(String msg, int type) throws IOException {      
+		byte[] buffer = msg.getBytes();
+		DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverIp, port+type+GROUP_NR);           
+		
+		//Paket absenden
+		if (type == UNICAST) {
+			unicastSocket.send(packet);
+		} else if (type == MULTICAST) {
+			multicastSocket.send(packet);
+		} else if (type == BROADCAST) {
+			packet.setAddress(InetAddress.getByName(BROADCAST_ADDRESS));
+			broadcastSocket.send(packet);
+		}
+		
+		System.out.println("Sending Message:" + msg);
+	}
+	
+	private String receiveMessage(int type) throws IOException {     
+		byte[] buffer = new byte[65000];
+		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+		
+		//Paket empfangen und daten auslesen
+		if (type == UNICAST) {
+			unicastSocket.receive(packet);
+		} else if (type == MULTICAST) {
+			multicastSocket.receive(packet);
+		} else if (type == BROADCAST) {
+			broadcastSocket.receive(packet);
+		}
+		
+		return new String(buffer);
+	}
+	
+	public static boolean validateIpAddress(final String ip) {
+		final String IP_PATTERN = 
+			"^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+			"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+			"([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+			"([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+		
+		Pattern pattern = Pattern.compile(IP_PATTERN);
+		Matcher matcher = pattern.matcher(ip);
+		
+		return matcher.matches();             
+	} 
+	
+	public static void usageAndExit() {
+		System.err.println("Usage: java UDPClient <matriculation_number> [unicast|multicast] <ip_address> <port>");
+		System.err.println("   or  java UDPClient <matriculation_number> broadcast <port>");
+		System.exit(-1);
+	}
+	
+	public static void main(String[] args) {  
+		// validate args
+		if (args.length < 3) {
+			usageAndExit();
+		}
+		
+		String transmissionType = args[1];
+		String ipAddress;
+		String port;
+		
+		if (transmissionType.equalsIgnoreCase("broadcast")) {
+			ipAddress = BROADCAST_ADDRESS;
+			port = args[2];
+		} else {
+			if (args.length < 4) {
+				usageAndExit();
+			}
+			ipAddress = args[2];
+			port = args[3];
+		}
+		
+		int clientPort = -1;
+		int transmission = -1;
+		int matNum = -1;
+		
+		// validate matriculation number
+		try {
+			matNum = Integer.parseInt(args[0]);
+		} catch (NumberFormatException e) {}
+		
+		if (matNum < MN_MIN || matNum > MN_MAX) {
+			System.err.println("Error: Matriculation number has to be a positive integer in range [" + MN_MIN + "," + MN_MAX + "]");
+			System.exit(-1);
+		}    
+		
+		// validate transmission type
+		if (transmissionType.equalsIgnoreCase("unicast")) {
+			transmission = UDPClient.UNICAST;
+		} else if (transmissionType.equalsIgnoreCase("multicast")) {
+			transmission = UDPClient.MULTICAST;
+		} else if (transmissionType.equalsIgnoreCase("broadcast")) {
+			transmission = UDPClient.BROADCAST;
+		} else {
+			usageAndExit();
+		}
+		
+		// validate ip-address
+		if (validateIpAddress(ipAddress) == false) {
+			System.out.println("Invalid IP-address: using default address (" + DEFAULT_ADDRESS + ")");
+			ipAddress = DEFAULT_ADDRESS;
+		}
+		
+		// validate port
+		try {
+			clientPort = Integer.parseInt(port);
+		} catch (NumberFormatException e) {}
+		
+		if (clientPort <= 0 || clientPort > 65535) {
+			System.out.println("Invalid port: using default port (" + CLIENT_PORT + ")");
+			clientPort = CLIENT_PORT;
+		}
+		
+		//Start the client
+		UDPClient client = new UDPClient(Integer.toString(matNum), transmission, ipAddress, clientPort);	
+		client.run();
+	}
 }
