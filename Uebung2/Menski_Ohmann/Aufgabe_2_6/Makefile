@@ -7,7 +7,6 @@ CLIENT_WRAPPER=udpclient
 SERVER=UDPServer
 SERVER_WRAPPER=udpserver
 
-SOURCES=$(CLIENT) $(SERVER)
 JAVAFILES=$(CLIENT).java $(SERVER).java UDPListenerRunnable.java
 BUILD_OS:=$(shell uname)
 
