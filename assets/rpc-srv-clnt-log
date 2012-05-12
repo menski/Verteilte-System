@@ -1,0 +1,28 @@
+/*
+ * console log of working rpc in Uebung2/Aufgabe_2_5
+ *
+ * rpcbind is mandatory to get rpcs working on network (not just localhost)
+ */
+ 
+ 
+// client log
+mohmann@T61Linux:~/Workspaces/Verteilte-System/Uebung2/Menski_Ohmann/Aufgabe_2_5$ rpcinfo -p 192.168.1.111
+   program vers proto   port
+    100000    4   tcp    111  portmapper
+    100000    3   tcp    111  portmapper
+    100000    2   tcp    111  portmapper
+    100000    4   udp    111  portmapper
+    100000    3   udp    111  portmapper
+    100000    2   udp    111  portmapper
+ 591733282    1   udp    743
+ 591733282    1   tcp    744
+
+mohmann@T61Linux:~/Workspaces/Verteilte-System/Uebung2/Menski_Ohmann/Aufgabe_2_5$ ./tcp_client 192.168.1.111 123456
+client received 5245198
+
+
+// server log; showing output received after client sent "1 123456"
+@X220 ➜  ~/Studium/current_sem/Verteilte Systeme/Uebung2/Menski_Ohmann/Aufgabe_2_5 git:(master) ✗ % sudo ./tcp_server                                                                                                                                                       [130]
+server received 1 123456
+server received 3 123456 5245198
+
