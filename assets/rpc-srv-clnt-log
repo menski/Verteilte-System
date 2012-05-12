@@ -4,7 +4,7 @@
  * rpcbind is mandatory to get rpcs working on network (and not just on localhost)
  *
  * client: Ubuntu 10.10 rpcbind not installed (since clients don't need that)
- * server: Ubuntu 11.10 rpcbind installed
+ * server: Ubuntu 11.10 rpcbind installed, network address: 192.168.1.111
  */
 /*
  * client log
