@@ -10,7 +10,7 @@
  * client log
  * 
  * last 2 entries of rpcinfo show that our program is 
- * registered for rcp calls (server application already started obv.)
+ * registered for rpc calls (server application already started obv.)
  */
 mohmann@T61Linux:~/Workspaces/Verteilte-System/Uebung2/Menski_Ohmann/Aufgabe_2_5$ rpcinfo -p 192.168.1.111
    program vers proto   port
