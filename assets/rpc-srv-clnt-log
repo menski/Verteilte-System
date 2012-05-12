@@ -1,11 +1,17 @@
 /*
- * console log of working rpc in Uebung2/Aufgabe_2_5
+ * console log of working rpc @ Uebung2/Aufgabe_2_5
  *
- * rpcbind is mandatory to get rpcs working on network (not just localhost)
+ * rpcbind is mandatory to get rpcs working on network (and not just on localhost)
+ *
+ * client: Ubuntu 10.10 rpcbind not installed (since clients don't need that)
+ * server: Ubuntu 11.10 rpcbind installed
  */
- 
- 
-// client log
+/*
+ * client log
+ * 
+ * last 2 entries of rpcinfo show that our program is 
+ * registered for rcp calls (server application already started obv.)
+ */
 mohmann@T61Linux:~/Workspaces/Verteilte-System/Uebung2/Menski_Ohmann/Aufgabe_2_5$ rpcinfo -p 192.168.1.111
    program vers proto   port
     100000    4   tcp    111  portmapper
@@ -20,8 +26,11 @@ mohmann@T61Linux:~/Workspaces/Verteilte-System/Uebung2/Menski_Ohmann/Aufgabe_2_5
 mohmann@T61Linux:~/Workspaces/Verteilte-System/Uebung2/Menski_Ohmann/Aufgabe_2_5$ ./tcp_client 192.168.1.111 123456
 client received 5245198
 
-
-// server log; showing output received after client sent "1 123456"
+/*
+ * server log
+ * 
+ * showing output received after client sent "1 123456"
+ */
 @X220 ➜  ~/Studium/current_sem/Verteilte Systeme/Uebung2/Menski_Ohmann/Aufgabe_2_5 git:(master) ✗ % sudo ./tcp_server                                                                                                                                                       [130]
 server received 1 123456
 server received 3 123456 5245198
