@@ -12,6 +12,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -70,7 +72,7 @@ public class UDPClient {
 			// receive message
 			receiveMessage(transmissionType);  
 		} catch (Exception e) {
-			System.err.println("Error: unable to open socket");
+			System.err.println("Error: unable to open");
 			e.printStackTrace();
 		} finally {
 			// close connection    

@@ -66,6 +66,7 @@ public class UDPServer {
 			// just wait until the server is closed          
 			while (true) {}
 		} catch (Exception e) {
+			e.printStackTrace();
 			// in this case stop the threads and close the sockets
 			unicastRunnable.stopRunning();
 			multicastRunnable.stopRunning();
@@ -74,8 +75,6 @@ public class UDPServer {
 			unicastSocket.close();
 			multicastSocket.close();
 			broadcastSocket.close();
-			
-			e.printStackTrace();
 			return;
 		} finally {
 			// stop the threads and close the sockets
