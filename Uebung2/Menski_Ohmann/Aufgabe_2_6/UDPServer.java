@@ -40,7 +40,7 @@ public class UDPServer {
 	}
 	
 	public void run() {
-		try {                    
+		try {       
 			// first create the UDP sockets
 			unicastSocket = new DatagramSocket (port+UNICAST+GROUP_NR);
 			multicastSocket = new MulticastSocket (port+MULTICAST+GROUP_NR);
@@ -66,7 +66,6 @@ public class UDPServer {
 			// just wait until the server is closed          
 			while (true) {}
 		} catch (Exception e) {
-			e.printStackTrace();
 			// in this case stop the threads and close the sockets
 			unicastRunnable.stopRunning();
 			multicastRunnable.stopRunning();
@@ -75,6 +74,8 @@ public class UDPServer {
 			unicastSocket.close();
 			multicastSocket.close();
 			broadcastSocket.close();
+			
+			e.printStackTrace();
 			return;
 		} finally {
 			// stop the threads and close the sockets
@@ -95,10 +96,9 @@ public class UDPServer {
 		if (message.substring(0,1).equals("1") && message.length() >= 8) {
 			System.out.println("server> Received Message: " + message);
 			
-			// handle matriculation number
+			// extract matriculation number
 			String matrikelnummer = message.substring(2,8);  
-			
-			System.out.println("server> == Matriculation number: " + matrikelnummer);
+			System.out.println("server> == MATRICULATION NUMBER: " + matrikelnummer);
 			
 			// calculate the random value
 			Random random = new Random();
@@ -108,10 +108,10 @@ public class UDPServer {
 			while (ranS.length() < 7){
 				ranS = "0" + ranS;
 			}
-			System.out.println("server> == Setting random number: " + ranS);
 			
-			// send tresponse
-			sendMessage("2 " + matrikelnummer + " " + ranS, type, packet);          
+			// send response
+			sendMessage("2 " + matrikelnummer + " " + ranS, type, packet);   
+			System.out.println("server> == SETTING RANDOM NUMBER: " + ranS);       
 		}    
 	}
 	
@@ -120,20 +120,23 @@ public class UDPServer {
 			byte[] buffer = msg.getBytes();
 			System.out.println("server> Sending Message: " + msg);
 			
-			// prepare packet
 			DatagramPacket packet;
 			if (type == UNICAST) {
+				// create packet; use ip-address of received packet
 				packet = new DatagramPacket(buffer, buffer.length, inPacket.getAddress(), inPacket.getPort());
 			} else if (type == MULTICAST) {
+				// create packet; use multicast address
 				packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(MULTICAST_ADDRESS), inPacket.getPort());
 			} else {
+				// create packet; use broadcast address
 				packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName(BROADCAST_ADDRESS), inPacket.getPort());
 			}
 			
 			// send packet
 			(new DatagramSocket()).send(packet);
 			
-		} catch (Exception e){
+		} catch (Exception e) {
+			System.err.println("Error: unable to send packet");
 			e.printStackTrace();
 		}
 	}
@@ -145,7 +148,7 @@ public class UDPServer {
 			System.exit(-1);
 		}
 		
-		int serverPort = 0;
+		int serverPort = -1;
 		
 		try {
 			serverPort = Integer.parseInt(args[0]);

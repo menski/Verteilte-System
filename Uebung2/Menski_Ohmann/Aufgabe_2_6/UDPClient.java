@@ -49,7 +49,8 @@ public class UDPClient {
 		try {
 			this.serverIp = InetAddress.getByName(ip);
 		} catch (UnknownHostException ex) {
-			Logger.getLogger(UDPClient.class.getName()).log(Level.SEVERE, null, ex);
+			System.err.println("Error: unknown host");
+			System.exit(-1);
 		}
 	}
 	
@@ -64,19 +65,15 @@ public class UDPClient {
 			} else if (transmissionType == BROADCAST) {
 				broadcastSocket = new DatagramSocket();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		try{      
 			// transmit message
 			message = "1 " + matriculationNumber;
 			sendMessage(message, transmissionType);
 			
 			// receive message
-			receiveMessage(transmissionType);       
-		} catch(IOException e) {
-			System.err.println("Error: Data received in unknown format");
+			receiveMessage(transmissionType);  
+		} catch (Exception e) {
+			System.err.println("Error: unable to open socket");
+			e.printStackTrace();
 		} finally {
 			// close connection    
 			try {
@@ -92,46 +89,54 @@ public class UDPClient {
 		}
 	}
 	
-	private void sendMessage(String msg, int type) throws IOException {      
-		byte[] buffer = msg.getBytes();
-		DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverIp, port+type+GROUP_NR);           
+	private void sendMessage(String msg, int type) {   
+		try {   
+			byte[] buffer = msg.getBytes();
+			DatagramPacket packet = new DatagramPacket(buffer, buffer.length, serverIp, port+type+GROUP_NR);           
 		
-		// send packet
-		if (type == UNICAST) {
-			unicastSocket.send(packet);
-		} else if (type == MULTICAST) {
-			multicastSocket.send(packet);
-		} else if (type == BROADCAST) {
-			// use broadcast address here
-			packet.setAddress(InetAddress.getByName(BROADCAST_ADDRESS));
-			broadcastSocket.send(packet);
+			// send packet
+			if (type == UNICAST) {
+				unicastSocket.send(packet);
+			} else if (type == MULTICAST) {
+				multicastSocket.send(packet);
+			} else if (type == BROADCAST) {
+				// use broadcast address here
+				packet.setAddress(InetAddress.getByName(BROADCAST_ADDRESS));
+				broadcastSocket.send(packet);
+			}
+		
+			System.out.println("client> Sending Message: " + msg);
+		} catch (IOException e) {
+			System.err.println("Error: unable to send message");
 		}
-		
-		System.out.println("client> Sending Message: " + msg);
 	}
 	
-	private void receiveMessage(int type) throws IOException {     
-		byte[] buffer = new byte[65000];
-		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+	private void receiveMessage(int type) {    
+		try { 
+			byte[] buffer = new byte[65000];
+			DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		
-		// receive packet and contents
-		if (type == UNICAST) {
-			unicastSocket.receive(packet);
-		} else if (type == MULTICAST) {
-			// wait for server response, omit "own" message
-			String msg;
-			do {
-				multicastSocket.receive(packet);
-				msg = new String(buffer);
-			} while (!msg.substring(0,1).equals("2") && msg.length() >= 8);
-		} else if (type == BROADCAST) {
-			broadcastSocket.receive(packet);
-		}
-		String response = new String(buffer);
+			// receive packet and contents
+			if (type == UNICAST) {
+				unicastSocket.receive(packet);
+			} else if (type == MULTICAST) {
+				// wait for server response, omit "own" message
+				String msg;
+				do {
+					multicastSocket.receive(packet);
+					msg = new String(buffer);
+				} while (!msg.substring(0,1).equals("2") && msg.length() >= 8);
+			} else if (type == BROADCAST) {
+				broadcastSocket.receive(packet);
+			}
+			String response = new String(buffer);
 		
-		System.out.println("client> Received Message: " + response); 
-		System.out.println("client> == Matriculation number: " + response.substring(2,8));
-		System.out.println("client> == Random number: " + response.substring(9,16));
+			System.out.println("client> Received Message: " + response); 
+			System.out.println("client> == MATRICULATION NUMBER: " + response.substring(2,8));
+			System.out.println("client> == RANDOM NUMBER: " + response.substring(9,16));
+		} catch (IOException e) {
+			System.err.println("Error: unable to read received message");
+		}		
 	}
 	
 	public static boolean validateIpAddress(final String ip) {
