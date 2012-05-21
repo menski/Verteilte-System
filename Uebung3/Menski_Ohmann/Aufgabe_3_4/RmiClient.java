@@ -7,8 +7,6 @@
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.RMISecurityManager;
-import java.text.DecimalFormat;
-import java.util.Arrays;
  
 public class RmiClient { 
 
@@ -52,20 +50,6 @@ public class RmiClient {
             System.err.println(e.getMessage());
         }  	
  	}
- 	
-	public static String intToString(int num, int digits) {
-	    if (digits > 0) {
-		    // create variable length array of zeros
-		    char[] zeros = new char[digits];
-		    Arrays.fill(zeros, '0');
-		    
-		    // format number as String
-		    DecimalFormat df = new DecimalFormat(String.valueOf(zeros));
-	
-		    return df.format(num);
-	    }
-	    return null;
-	}	
  
     public static void main(String args[]) {
         // Create and install a security manager
@@ -92,7 +76,7 @@ public class RmiClient {
 		}
 		
 		int port = REGISTRY_PORT;
-		
+
 		// try to use custom port if given and valid, use default port otherwise
 		if (args.length >= 3) {
 			try {
@@ -101,9 +85,9 @@ public class RmiClient {
 				System.out.println("Invalid port: using default port (" + REGISTRY_PORT + ")");
 			}
 		}
-		
+
 		// init and run the client   
-        RmiClient rmiClient = new RmiClient(intToString(matNum, MN_DIGITS), args[0], port);
- 		rmiClient.run();
+		RmiClient rmiClient = new RmiClient(String.format("%06d", matNum), args[0], port);
+		rmiClient.run();
     }
 }

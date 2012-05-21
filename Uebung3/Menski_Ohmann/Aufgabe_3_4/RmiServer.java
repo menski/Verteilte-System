@@ -47,9 +47,6 @@ public class RmiServer {
         // Create and install a security manager
         if (System.getSecurityManager() == null) {
             System.setSecurityManager(new RMISecurityManager());
-            /*System.out.println("Security manager installed.");
-        } else {
-            System.out.println("Security manager already exists.");*/
         }
         
     	int port = REGISTRY_PORT;
