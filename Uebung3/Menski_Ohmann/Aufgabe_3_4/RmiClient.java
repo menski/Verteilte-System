@@ -7,7 +7,9 @@
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.RMISecurityManager;
- 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 public class RmiClient { 
 
 	private static final int MN_MIN = 1;
@@ -30,6 +32,7 @@ public class RmiClient {
  	
  	public void run() {
         try { 
+			InetAddress serverIp = InetAddress.getByName(serverAddress);
             stub = (RmiServerIntf)Naming.lookup("//" + serverAddress + ":" + registryPort + "/RmiServerImpl");
             
             request = "1 " + matriculationNumber;
@@ -43,7 +46,10 @@ public class RmiClient {
             	response = stub.processRequest(request);
             	System.out.println("client> Received "+response);
             }
-        } catch (Exception e) { 
+        } catch (UnknownHostException e) {
+			System.err.println("Error: unknown host");
+			System.exit(-1);
+		} catch (Exception e) { 
             System.err.println("RmiClient exception: " + e); 
             e.printStackTrace(); 
  

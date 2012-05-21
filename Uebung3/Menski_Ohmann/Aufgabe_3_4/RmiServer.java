@@ -37,6 +37,7 @@ public class RmiServer {
             
 	        System.out.println("RMI server started");
             System.out.println("PeerServer bound in registry");
+            Thread.sleep(100000000);
         } catch (Exception e) {
             System.err.println("RMI server exception:" + e);
             e.printStackTrace();
