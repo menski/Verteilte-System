@@ -26,12 +26,6 @@ public class RmiServerImpl extends UnicastRemoteObject implements RmiServerIntf 
     public String randomNumber() throws RemoteException {
 		// calculate the random value
 		Random random = new Random();
-		int ran = random.nextInt(9999999);
-		String randomString = String.valueOf(ran);
-		
-		while (randomString.length() < 7){
-			randomString = "0" + randomString;
-		}
-		return randomString;
+		return String.format("%07d", random.nextInt(9999999));
     }
 }
