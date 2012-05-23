@@ -38,7 +38,7 @@
 
 \begin{enumerate}
 
-	\item Der UDP-Server verwendet vier Threads, wovon die UDPListenerRunnables für Unicast, Multicast und Bradcast jeweils einen nutzen.
+	\item Der UDP-Server verwendet vier Threads, wovon die UDPListenerRunnables für Unicast, Multicast und Broadcast jeweils einen nutzen.
 	Der vierte Thread ist der UDPServer-Thread selbst. Zur Lastermittlung wurde \texttt{htop} benutzt. Auffällig ist, dass die Lastverteilung hierbei sehr unausgeglichen ist: der UDPServer-Thread nutzt 99-100\% 
 	der CPU, die Threads der UDPListenerRunnables zeigen beim Senden einer Nachricht vom Client an den Server keine Veränderung der Lastverteilung.
 	
