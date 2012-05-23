@@ -11,7 +11,7 @@ import java.rmi.registry.*;
  
 public class RmiServer {
 
-	private static final int REGISTRY_PORT = 1099;
+	private static final int REGISTRY_PORT = 10041;
 	
 	private int registryPort;
 
@@ -29,12 +29,13 @@ public class RmiServer {
         }
  
         try {
+        	System.out.println("asdf");
             //Instantiate RmiServerImpl
             RmiServerImpl stub = new RmiServerImpl();
- 
+ System.out.println("asdf");
             // Bind this object instance to the name "RmiServerImpl"
-            Naming.rebind("RmiServerImpl", stub);
-            
+            Naming.rebind("//localhost:" + registryPort + "/RmiServerImpl", stub);
+
 	        System.out.println("RMI server started");
             System.out.println("PeerServer bound in registry");
         } catch (Exception e) {

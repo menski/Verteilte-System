@@ -15,7 +15,7 @@ public class RmiClient {
 	private static final int MN_MIN = 1;
 	private static final int MN_MAX = 999999;
 	private static final int MN_DIGITS = 6;
-	private static final int REGISTRY_PORT = 1099;
+	private static final int REGISTRY_PORT = 10041;
 	
     private RmiServerIntf stub = null;
     private String matriculationNumber;
