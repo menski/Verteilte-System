@@ -38,13 +38,14 @@
 
 \begin{enumerate}
 
-	\item Der UDP-Server verwendet vier Threads, wovon die UDPListenerRunnables für Unicast, Multicast und Broadcast jeweils einen nutzen.
-	Der vierte Thread ist der UDPServer-Thread selbst. Zur Lastermittlung wurde \texttt{htop} benutzt. Auffällig ist, dass die Lastverteilung hierbei sehr unausgeglichen ist: der UDPServer-Thread nutzt 99-100\% 
-	der CPU, die Threads der UDPListenerRunnables zeigen beim Senden einer Nachricht vom Client an den Server keine Veränderung der Lastverteilung.
+	\item Der UDP-Server verwendet vier Threads, wovon die \texttt{UDPListenerRunnable}-Instanz\-en für Unicast, Multicast und Broadcast jeweils einen nutzen.
+	Der vierte Thread ist der \texttt{UDPServer}-Instanz selbst. Zur Lastermittlung wurde \texttt{htop} benutzt. Auffällig ist, dass die Lastverteilung hierbei 
+	sehr unausgeglichen ist: der \texttt{UDPServer}-Thread nutzt 99-100\% 
+	der CPU, die Threads der \texttt{UDPListenerRunnable}-Instanzen zeigen beim Senden einer Nachricht vom Client an den Server keine Veränderung der Lastverteilung.
 	
-	\item Die hohe CPU-Auslastung durch den UDPServer- Thread wird durch eine leere \texttt{while(true)}-Schleife in der \texttt{run}-Methode des UDPServers verursacht. 
-	Dies lässt sich durch ein \texttt{Thread.sleep()} im Schleifenkörper beheben. Nach dem Bugfix lässt sich erkennen, dass beim Senden einer Nachricht vom Client an den Server die Auslastung des UDPServer-Threads bei 
-	0\% liegt, die Auslastung des jeweiligen UDPListenerRunnable-Threads jedoch kurzzeitig auf etwa 1\% steigt.
+	\item Die hohe CPU-Auslastung durch den Thread der \texttt{UDPServer}-Instanz wird durch eine leere \texttt{while(true)}-Schleife in der \texttt{run}-Methode des UDP-Servers verursacht. 
+	Dies lässt sich durch ein \texttt{Thread.sleep()} im Schleifenkörper beheben. Nach dem Beheben des Performance-Leaks lässt sich erkennen, dass beim Senden einer Nachricht vom Client an den Server die Auslastung des \texttt{UDPServer}-Threads bei 
+	0\% liegt, die Auslastung des jeweiligen \texttt{UDPListenerRunnable}-Threads jedoch kurzzeitig auf etwa 1\% steigt.
 
 \end{enumerate}
 
@@ -53,17 +54,17 @@
 \begin{enumerate}
 
 	\item Broadcast und Multicast haben die gemeinsame Eigenschaft, Packete an mehrere Empfänger gleichzeitig zu versenden. 
-	Der Unterschied zwischen Multicast und Broadcast besteht darin, dass die mittles Broadcast 
-	gesendeten Packete vom jeden Teilnehmer des Netzwerks empfangen werden können, wohingegen beim 
+	Der Unterschied zwischen Multicast und Broadcast besteht darin, dass die mittels Broadcast 
+	gesendeten Packete von jedem Teilnehmer des Netzwerks empfangen werden können, wohingegen bei 
 	Multicast eine vorherige Anmeldung beim Sender der Packete erforderlich ist.
 	 
 	\item In IPv4 wird in zwei verschiedene Broadcast-Formen unterschieden:
 		\begin{itemize}
-			\item \textbf{Limited Braodcast}: Hier wird als Ziel die IP-Adresse \texttt{255.255.255.255} angegeben. Dieses befindet sich 
+			\item \textbf{Limited Broadcast}: Hier wird als Ziel die IP-Adresse \texttt{255.255.255.255} angegeben. Dieses befindet sich 
 			immer im eigenen Netz und wird direkt als Ethernet-Broadcast umgesetzt. Es findet keine Weiterleitung durch einen Router 
 			statt.
 			\item \textbf{Directed Broadcast}: Beim \textit{Directed Broadcast} werden Packete an Teilnehmer eines bestimmten Netzes versendet.
-			Für einen \textit{Directed Broadcast} in das Netz \texttt{192.168.0.0} mit der Netzmaske \texttt{255.255.255.0} lautet die Zieladresse 
+			Bsp.: Für einen \textit{Directed Broadcast} in das Netz \texttt{192.168.0.0} mit der Netzmaske \texttt{255.255.255.0} lautet die Zieladresse 
 			\texttt{(192.168.0.0/24):192.168.0.255}. \textit{Directed Broadcasts} werden von einem Router weitergeleitet, falls Quell- und 
 			Zielnetz unterschiedlich sind. Sind die Netze identisch, so entspricht ein \textit{Directed Broadcast} dem \textit{Limited Broadcast}.
 		\end{itemize}
@@ -75,17 +76,17 @@
 		wodurch sich MAC-Adressen im Bereich \texttt{01-00-5e-00-00-00} bis \texttt{01-00-5e-7f-ff-ff} ergeben können.
 		
 
-	\item Skype benutzt sowohl TCP, UDP als auch das eigene proprietär VoIP Protokoll. Es werden
+	\item Skype benutzt sowohl TCP, UDP als auch das eigene proprietäre VoIP-Protokoll. Es werden
 		verschiedene Techniken genutzt um jegliche Firewalls und NATs zu überwinden (z.B. UDP hole
-		punching). Für den Login (Anmeldung des Nutzers beim Skype-Server) wird zuerst versucht eine UDP
-		Verbindung aufzubauen, erst beim Scheitern dieser wird auf TCP zurück gegriffen. Dies ist
+		punching). Für den Login (Anmeldung des Nutzers beim Skype-Server) wird zuerst versucht eine UDP-Verbindung 
+		aufzubauen, erst beim Scheitern dieser wird auf TCP zurück gegriffen. Dies ist
 		verständlich, da es keine stabile Verbindung sein muss, sondern nur ein Bekanntmachen, dass der
-		Kontakt online ist und wo er erreichbar ist. Die Chat Nachrichten werden hauptsächlich über TCP
+		Kontakt online ist und wo er erreichbar ist. Die Chat-Nachrichten werden hauptsächlich über TCP
 		versendet. Das ist sinnvoll, da es vom Nutzer gewünscht ist, dass alle Nachrichten ankommen und
-		auch in der richtigen Reihenfolge angezeigt werden. Telefonate werden über das eigene VoIP
-		Protokoll über UDP abgewickelt. Dies ist verständlich, da es bei VoIP nicht darauf ankommt alle
-		Datenpakete zu übermitteln, sondern eine geringe Latenz zu erziehlen.  Dazu bieten sich UDP eher
-		an als TCP. Da Skype ebenfalls Konferenz-Gespräche und Gruppen-Chats anbieten, wird für diese
+		auch in der richtigen Reihenfolge angezeigt werden. Telefonate werden über das eigene VoIP-Protokoll 
+		über UDP abgewickelt. Dies ist verständlich, da es bei VoIP nicht darauf ankommt alle
+		Datenpakete zu übermitteln, sondern eine geringe Latenz zu erzielen. Dazu bietet sich UDP eher
+		an als TCP. Da Skype ebenfalls Konferenzgespräche und Gruppen-Chats anbietet, wird für diese
 		Anwendungsfälle Multicast Kommunikation genutzt.
 	
 \end{enumerate}
@@ -99,19 +100,19 @@
 	aufgerufene Funktion auf einen anderen Rechner als dem des aufrufenden Programms ausgeführt.
 	 
 	\item RPC entlasstet den Programmierer insofern, dass es die Netzwerkkommunikation übernimmt. Da
-		dies keine triviale Aufgabe ist aber immer wieder benötigt wird, ist sie vom RPC Framework
-		abgedeckt. RPC Systeme ermöglichen es auch aufwendige Aufgaben auf einen starken Server
-		zuverlegen, welcher dann die rechenaufwendigen Teile für mehrer Clients übernehemen kann. Somit
+		dies keine triviale Aufgabe ist aber immer wieder benötigt wird, ist sie vom RPC-Framework
+		abgedeckt. RPC-Systeme ermöglichen es auch aufwändige Aufgaben auf einen starken Server
+		zuverlegen, welcher dann die rechenaufwändigen Teile für mehrere Clients übernehemen kann. Somit
 		können die Clients auch auf schwächeren Maschinen genutzt werden.
 
 	\item Ortstransparenz kann nur bei RPC und RMI erreicht werden, wenn der zu kontaktierende Server
 		bereits bei der Programmierung feststeht oder während der Laufzeit entdeckt werden kann (z.B.
 		Bonjour-Protokoll). Ist diese Adresse jedoch nicht fest und muss vom Nutzer beim Start des
-		Programms angegeben werden, ist keine Ortstransparenz vorhanden.  Namenstransparenz ist jedoch
+		Programms angegeben werden, ist keine Ortstransparenz vorhanden. Namenstransparenz ist jedoch
 		bei RPC und RMI gegeben, da der Service lokal als auch entfernt durch die selbe Art und Weise
 		aufgerufen wird.
 
-		Migrations und Replikationstransparenz kann durch geeignete Techniken auf Serverseite garantiert
+		Migrations- und Replikationstransparenz kann durch geeignete Techniken auf Serverseite garantiert
 		werden. Fehlertransparenz und Nebenläufigkeitstransparenz ist von dem Konzept des Programms bzw.
 		Services abhängig und nicht allgemein beantwortbar.
 	
@@ -122,14 +123,14 @@
 \begin{enumerate}
 
 	\item Der Client kontaktiert einen Rechner, welcher zwar im Netzwerk erreichbar ist, jedoch den RMI-Service nicht gestartet hat.
-	Der Client wirft eine ConnectionException, da die Verbindung vom Server abgewiesen wird.
+	Der Client wirft eine \texttt{ConnectionException}, da die Verbindung vom Server abgewiesen wird.
 	 
 	\item Der Client versucht sich mit einer nicht erreichbaren/nicht vergebenen Netzwerkadresse zu verbinden. 
-	Der Client wirft einen UnknownHostException, da er den Hostnamen nicht auflösen kann.
+	Der Client wirft einen \texttt{UnknownHostException}, da er den Hostnamen nicht auflösen kann.
 
 	\item Der Server wird dahingehend manipuliert, sodass er in einer Endlosschleife hängt. Der Client sendet nun eine Anfrage an 
 	den Server, auf welche dieser nicht antwortet. Der Client wartet in diesem Fall unendlich lang auf die Antwort des Servers, da standardmäßig 
-	kein Timeout gesetzt ist. Dieses kann man jedoch über das tcp-responseTimeout selbst festlegen, um einem Hängen des Clients durch einen 
+	kein Timeout gesetzt ist. Dieses kann man jedoch über das \texttt{tcp-responseTimeout} selbst festlegen, um einem Hängen des Clients durch einen 
 	nicht reagierenden Server vorzubeugen.
 	
 \end{enumerate}
