@@ -38,9 +38,13 @@
 
 \begin{enumerate}
 
-	\item blah
-	 
-	\item blah
+	\item Der UDP-Server verwendet vier Threads, wovon die UDPListenerRunnables für Unicast, Multicast und Bradcast jeweils einen nutzen.
+	Der vierte Thread ist der UDPServer-Thread selbst. Zur Lastermittlung wurde \texttt{htop} benutzt. Auffällig ist, dass die Lastverteilung hierbei sehr unausgeglichen ist: der UDPServer-Thread nutzt 99-100\% 
+	der CPU, die Threads der UDPListenerRunnables zeigen beim Senden einer Nachricht vom Client an den Server keine Veränderung der Lastverteilung.
+	
+	\item Die hohe CPU-Auslastung durch den UDPServer- Thread wird durch eine leere \texttt{while(true)}-Schleife in der \texttt{run}-Methode des UDPServers verursacht. 
+	Dies lässt sich durch ein \texttt{Thread.sleep()} im Schleifenkörper beheben. Nach dem Bugfix lässt sich erkennen, dass beim Senden einer Nachricht vom Client an den Server die Auslastung des UDPServer-Threads bei 
+	0\% liegt, die Auslastung des jeweiligen UDPListenerRunnable-Threads jedoch kurzzeitig auf etwa 1\% steigt.
 
 \end{enumerate}
 
@@ -48,11 +52,36 @@
 
 \begin{enumerate}
 
-	\item blah
+	\item Broadcast und Multicast haben die gemeinsame Eigenschaft, Packete an mehrere Empfänger gleichzeitig zu versenden. 
+	Der Unterschied zwischen Multicast und Broadcast besteht darin, dass die mittles Broadcast 
+	gesendeten Packete vom jeden Teilnehmer des Netzwerks empfangen werden können, wohingegen beim 
+	Multicast eine vorherige Anmeldung beim Sender der Packete erforderlich ist.
 	 
-	\item blah
+	\item In IPv4 wird in zwei verschiedene Broadcast-Formen unterschieden:
+		\begin{itemize}
+			\item \textbf{Limited Braodcast}: Hier wird als Ziel die IP-Adresse \texttt{255.255.255.255} angegeben. Dieses befindet sich 
+			immer im eigenen Netz und wird direkt als Ethernet-Broadcast umgesetzt. Es findet keine Weiterleitung durch einen Router 
+			statt.
+			\item \textbf{Directed Broadcast}: Beim \textit{Directed Broadcast} werden Packete an Teilnehmer eines bestimmten Netzes versendet.
+			Für einen \textit{Directed Broadcast} in das Netz \texttt{192.168.0.0} mit der Netzmaske \texttt{255.255.255.0} lautet die Zieladresse 
+			\texttt{(192.168.0.0/24):192.168.0.255}. \textit{Directed Broadcasts} werden von einem Router weitergeleitet, falls Quell- und 
+			Zielnetz unterschiedlich sind. Sind die Netze identisch, so entspricht ein \textit{Directed Broadcast} dem \textit{Limited Broadcast}.
+		\end{itemize}
+		
+		
+		Für Multicast in IPv4 ist der Adressbereich von \texttt{224.0.0.0} bis \texttt{239.255.255.255} reserviert. Bei einem 
+		Mulicast wird die Multicast-Adresse auf eine Pseudo-MAC-Adresse abgebildet, um der Netzwerkkarte die Filterung nach relevanten 
+		Packeten zu ermöglichen. Dazu werden die untersten 23 Bit der IP-Adresse in die Mac-Adresse \texttt{01-00-5e-00-00-00} eingesetzt, 
+		wodurch sich MAC-Adressen im Bereich \texttt{01-00-5e-00-00-00} bis \texttt{01-00-5e-7f-ff-ff} ergeben können.
+		
 
-	\item blah
+	\item 
+		\begin{itemize}
+			\item \textbf{Audio-/Videotelefonat}: Hier wird Multicast genutzt. Dies ist sinnvoll, da beim Multicast die Packete nur jeweils 
+			einmal versendet werden, was den verursachten Traffic minimiert.
+			\item \textbf{Chat}: 
+			\item \textbf{sonstige Nachrichten}:
+		\end{itemize}
 	
 \end{enumerate}
 
@@ -60,7 +89,9 @@
 
 \begin{enumerate}
 
-	\item blah
+	\item Der Begriff \textit{Remote Procedure Call} bezeichnet eine Technik, welche zur Interprozesskommunikation genutzt wird. 
+	Dabei wird der Aufruf von Funktionen in anderen Adressräumen, wie etwa entfernten Rechnern, ermöglicht. In der Regel wird die 
+	aufgerufene Funktion auf einen anderen Rechner als dem des aufrufenden Programms ausgeführt.
 	 
 	\item blah
 
@@ -72,13 +103,16 @@
 
 \begin{enumerate}
 
-	\item Der Client wirft einen ConnectionException, da die Verbindung vom Server 
-	abgewiesen wird.
+	\item Der Client kontaktiert einen Rechner, welcher zwar im Netzwerk erreichbar ist, jedoch den RMI-Service nicht gestartet hat.
+	Der Client wirft eine ConnectionException, da die Verbindung vom Server abgewiesen wird.
 	 
-	\item Der Client wirft einen UnknownHostException, da er den Hostnamen nicht auflösen 
-	kann.
+	\item Der Client versucht sich mit einer nicht erreichbaren/nicht vergebenen Netzwerkadresse zu verbinden. 
+	Der Client wirft einen UnknownHostException, da er den Hostnamen nicht auflösen kann.
 
-	\item blah
+	\item Der Server wird dahingehend manipuliert, sodass er in einer Endlosschleife hängt. Der Client sendet nun eine Anfrage an 
+	den Server, auf welche dieser nicht antwortet. Dier Client wartet in diesem Fall unendlich lang auf die Antwort des Servers, da standardmäßig 
+	kein Timeout gesetzt ist. Dieses kann man jedoch über das tcp-responseTimeout selbst festlegen, um einem Hängen des Clients durch einen 
+	nicht reagierenden Server vorzubeugen.
 	
 \end{enumerate}
 
