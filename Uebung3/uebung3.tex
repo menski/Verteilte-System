@@ -75,13 +75,18 @@
 		wodurch sich MAC-Adressen im Bereich \texttt{01-00-5e-00-00-00} bis \texttt{01-00-5e-7f-ff-ff} ergeben können.
 		
 
-	\item 
-		\begin{itemize}
-			\item \textbf{Audio-/Videotelefonat}: Hier wird Multicast genutzt. Dies ist sinnvoll, da beim Multicast die Packete nur jeweils 
-			einmal versendet werden, was den verursachten Traffic minimiert.
-			\item \textbf{Chat}: 
-			\item \textbf{sonstige Nachrichten}:
-		\end{itemize}
+	\item Skype benutzt sowohl TCP, UDP als auch das eigene proprietär VoIP Protokoll. Es werden
+		verschiedene Techniken genutzt um jegliche Firewalls und NATs zu überwinden (z.B. UDP hole
+		punching). Für den Login (Anmeldung des Nutzers beim Skype-Server) wird zuerst versucht eine UDP
+		Verbindung aufzubauen, erst beim Scheitern dieser wird auf TCP zurück gegriffen. Dies ist
+		verständlich, da es keine stabile Verbindung sein muss, sondern nur ein Bekanntmachen, dass der
+		Kontakt online ist und wo er erreichbar ist. Die Chat Nachrichten werden hauptsächlich über TCP
+		versendet. Das ist sinnvoll, da es vom Nutzer gewünscht ist, dass alle Nachrichten ankommen und
+		auch in der richtigen Reihenfolge angezeigt werden. Telefonate werden über das eigene VoIP
+		Protokoll über UDP abgewickelt. Dies ist verständlich, da es bei VoIP nicht darauf ankommt alle
+		Datenpakete zu übermitteln, sondern eine geringe Latenz zu erziehlen.  Dazu bieten sich UDP eher
+		an als TCP. Da Skype ebenfalls Konferenz-Gespräche und Gruppen-Chats anbieten, wird für diese
+		Anwendungsfälle Multicast Kommunikation genutzt.
 	
 \end{enumerate}
 
@@ -93,9 +98,21 @@
 	Dabei wird der Aufruf von Funktionen in anderen Adressräumen, wie etwa entfernten Rechnern, ermöglicht. In der Regel wird die 
 	aufgerufene Funktion auf einen anderen Rechner als dem des aufrufenden Programms ausgeführt.
 	 
-	\item blah
+	\item RPC entlasstet den Programmierer insofern, dass es die Netzwerkkommunikation übernimmt. Da
+		dies keine triviale Aufgabe ist aber immer wieder benötigt wird, ist sie vom RPC Framework
+		abgedeckt. RPC Systeme ermöglichen es auch aufwendige Aufgaben auf einen starken Server
+		zuverlegen, welcher dann die rechenaufwendigen Teile für mehrer Clients übernehemen kann. Somit
+		können die Clients auch auf schwächeren Maschinen genutzt werden.
 
-	\item blah
+	\item Ortstransparenz kann nur bei RPC und RMI erreicht werden, wenn der zu kontaktierende Server
+		bereits bei der Programmierung feststeht. Ist diese Adresse jedoch nicht fest und muss vom
+		Nutzer beim Start des Programms angegeben werden, ist keine Ortstransparenz vorhanden.
+		Namenstransparenz ist jedoch bei RPC und RMI gegeben, da der Service lokal als auch entfernt
+		durch die selbe Art und Weise aufgerufen wird.
+
+		Migrations und Replikationstransparenz kann durch geeignete Techniken auf Serverseite garantiert
+		werden. Fehlertransparenz und Nebenläufigkeitstransparenz ist von dem Konzept des Programms bzw.
+		Services abhängig und nicht allgemein beantwortbar.
 	
 \end{enumerate}
 
@@ -110,7 +127,7 @@
 	Der Client wirft einen UnknownHostException, da er den Hostnamen nicht auflösen kann.
 
 	\item Der Server wird dahingehend manipuliert, sodass er in einer Endlosschleife hängt. Der Client sendet nun eine Anfrage an 
-	den Server, auf welche dieser nicht antwortet. Dier Client wartet in diesem Fall unendlich lang auf die Antwort des Servers, da standardmäßig 
+	den Server, auf welche dieser nicht antwortet. Der Client wartet in diesem Fall unendlich lang auf die Antwort des Servers, da standardmäßig 
 	kein Timeout gesetzt ist. Dieses kann man jedoch über das tcp-responseTimeout selbst festlegen, um einem Hängen des Clients durch einen 
 	nicht reagierenden Server vorzubeugen.
 	
