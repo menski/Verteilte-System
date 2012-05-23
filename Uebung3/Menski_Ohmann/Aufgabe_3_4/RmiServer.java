@@ -29,10 +29,9 @@ public class RmiServer {
         }
  
         try {
-        	System.out.println("asdf");
             //Instantiate RmiServerImpl
             RmiServerImpl stub = new RmiServerImpl();
- System.out.println("asdf");
+
             // Bind this object instance to the name "RmiServerImpl"
             Naming.rebind("//localhost:" + registryPort + "/RmiServerImpl", stub);
 
