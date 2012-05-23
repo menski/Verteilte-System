@@ -105,10 +105,11 @@
 		können die Clients auch auf schwächeren Maschinen genutzt werden.
 
 	\item Ortstransparenz kann nur bei RPC und RMI erreicht werden, wenn der zu kontaktierende Server
-		bereits bei der Programmierung feststeht. Ist diese Adresse jedoch nicht fest und muss vom
-		Nutzer beim Start des Programms angegeben werden, ist keine Ortstransparenz vorhanden.
-		Namenstransparenz ist jedoch bei RPC und RMI gegeben, da der Service lokal als auch entfernt
-		durch die selbe Art und Weise aufgerufen wird.
+		bereits bei der Programmierung feststeht oder während der Laufzeit entdeckt werden kann (z.B.
+		Bonjour-Protokoll). Ist diese Adresse jedoch nicht fest und muss vom Nutzer beim Start des
+		Programms angegeben werden, ist keine Ortstransparenz vorhanden.  Namenstransparenz ist jedoch
+		bei RPC und RMI gegeben, da der Service lokal als auch entfernt durch die selbe Art und Weise
+		aufgerufen wird.
 
 		Migrations und Replikationstransparenz kann durch geeignete Techniken auf Serverseite garantiert
 		werden. Fehlertransparenz und Nebenläufigkeitstransparenz ist von dem Konzept des Programms bzw.
