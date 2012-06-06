@@ -13,6 +13,7 @@
 \usepackage[font=small,format=plain,labelfont=bf,up,textfont=it,up]{caption}
 \usepackage{subfig}
 \usepackage[colorlinks=false, pdfborder={1 0 0}]{hyperref}
+\usepackage{qtree}
 
 
 \pagestyle{plain}
@@ -38,9 +39,24 @@
 
 \begin{enumerate}
 
-	\item Text
+	\item
+		\begin{tabular}{ccc}
+			Router & Hops & Gateway \\\hline
+			B & 1 & B \\
+			C & 2 & F \\
+			D & 2 & B \\
+			E & 1 & E \\
+			F & 1 & F \\
+			G & 2 & E \\
+			H & 2 & F \\
+			I & 3 & B (oder F)\\
+		\end{tabular}
 	
-	\item Text
+	\item Es treten 16 Hops auf. Zuerst sendet A $\rightarrow$ (B, F, E); dann B $\rightarrow$ (D, F), F $\rightarrow$ (B, C, H), E
+		$\rightarrow$ (F, H); dann D $\rightarrow$ (C, I), C $\rightarrow$ D, H $\rightarrow$ (G, I), G
+		$\rightarrow$ H.\\Daraus ergibt sich folgender Baum:
+		\Tree [.A [.B [.D I ] ] [.F C H ] [.E G ] ]
+
 	
 	\item Text
 
