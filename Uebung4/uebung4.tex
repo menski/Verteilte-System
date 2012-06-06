@@ -70,11 +70,16 @@ Text
 
 \begin{enumerate}
 
-	\item Text
+	\item Der Nutzer kann durch NFS auf nicht lokale Dateien zugreifen, diese werden jedoch direkt in
+		das lokale Filesystem des Users eingebunden. Somit wird eine Ortstransparenz erreicht.
 	
-	\item Text
+	\item Der Administrator muss die Entfernten Filesystems und ihre lokalen Mount-Punkte dem System
+		bekannt machen (meißt in die \texttt{/etc/fstab} eintragen).
 	
-	\item Text
+	\item NFSv3 war ein zustandsloser Dienst, d.h. der Client musste bei jedem Datenaustausch alle
+		benötigten Parameter mitsenden. NFSv4 hingegegen ist ein zustandsbehafteter Dienst, so mit
+		existiert für jeden Client ein Zustand auf dem Server, wodurch nun auch \texttt{open} und
+		\texttt{close} Befehle verfügbar sind.
 	
 	\item Text
 	
