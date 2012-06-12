@@ -39,8 +39,8 @@
 
 \begin{enumerate}
 
-	\item
-		\begin{tabular}{ccc}
+	\item Die Wegwahltabelle für Router A sieht wie folgt aus:\\
+		\begin{tabular}{c|c|c}
 			Router & Hops & Gateway \\\hline
 			B & 1 & B \\
 			C & 2 & F \\
@@ -54,34 +54,32 @@
 	
 	\item Es treten 16 Hops auf. Zuerst sendet A $\rightarrow$ (B, F, E); dann B $\rightarrow$ (D, F), F $\rightarrow$ (B, C, H), E
 		$\rightarrow$ (F, H); dann D $\rightarrow$ (C, I), C $\rightarrow$ D, H $\rightarrow$ (G, I), G
-		$\rightarrow$ H.\\Daraus ergibt sich folgender Baum:
+		$\rightarrow$ H.\\Daraus ergibt sich folgender Baum:\\
 		\Tree [.A [.B [.D I ] ] [.F C H ] [.E G ] ]
 
 	
-	\item Text
+	\item Eine sinnvolle TTL für das Beispiel wäre drei. Die Anzahl der Hops 
+		bleibt jedoch die gleiche wie unter b).
 
 \end{enumerate}
-
-\section*{Aufgabe 4.2}
-
-Text
 
 \section*{Aufgabe 4.3}
 
 \begin{enumerate}
 
-	\item Der Nutzer kann durch NFS auf nicht lokale Dateien zugreifen, diese werden jedoch direkt in
+	\item Der Nutzer kann durch NFS auf nicht-lokale Dateien zugreifen, diese werden jedoch direkt in
 		das lokale Filesystem des Users eingebunden. Somit wird eine Ortstransparenz erreicht.
 	
-	\item Der Administrator muss die Entfernten Filesystems und ihre lokalen Mount-Punkte dem System
-		bekannt machen (meißt in die \texttt{/etc/fstab} eintragen).
+	\item Der Administrator muss die entfernten Filesystems und ihre lokalen Mount-Punkte dem System
+		bekannt machen (meist in die \texttt{/etc/fstab} eintragen).
 	
 	\item NFSv3 war ein zustandsloser Dienst, d.h. der Client musste bei jedem Datenaustausch alle
-		benötigten Parameter mitsenden. NFSv4 hingegegen ist ein zustandsbehafteter Dienst, so mit
+		benötigten Parameter mitsenden. NFSv4 hingegegen ist ein zustandsbehafteter Dienst, somit
 		existiert für jeden Client ein Zustand auf dem Server, wodurch nun auch \texttt{open} und
 		\texttt{close} Befehle verfügbar sind.
 	
-	\item 5? (Für jeden Teil des Pfads einen?)
+	\item Es werden mindestens 5 Lookups benötigt, da bei jedem Teil des Pfades geprüft werden 
+		muss, ob dieser lokal oder entfernt ist.
 	
 	\item Der Server hält den State des Clients für die Lease-Time. Wenn der Client nicht innerhalb
 		der Lease-Time diese erneuert, wird der State des Clients vom Server verworfen.
