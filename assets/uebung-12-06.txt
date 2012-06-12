@@ -1,0 +1,9 @@
+C_s(x) Zeitstempel von Ereignis x afu dem Server
+
+Das Verfahren z.A erzeugt eine totale Ordnun auf den Ereignissen Betreten un verlassen des K.B.
+
+C_s(a) < C_s(b) <=> a->b (lokale Uhr)
+
+a' eintreffen Freigabenachricht vom Client dann gilt a->a', weil:
+a->a'' und a''-> a'
+Fall: C_s(a) < C_s(b) <  C_s(a') dann gilt a->b->a'
