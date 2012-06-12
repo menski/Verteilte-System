@@ -3,4 +3,4 @@
 from xmlrpclib import ServerProxy
 
 for i in range(10):
-    print "SessionId:", str(ServerProxy("http://localhost:8000/").session_id())
+    print "Session Id:", ServerProxy("http://localhost:8000/").session_id()
