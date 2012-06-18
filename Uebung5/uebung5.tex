@@ -53,10 +53,22 @@
 	System lahm legen.
 	
 	\item Das Token-Verfahren ist fehleranfällig, da beim Ausfall eines 
-	Prozesses P$_{i}$ / einer Maschine M$_{i}$ ein Tokenverlust erkannt werden 
-	muss.
+	Prozesses P$_{i}$ / einer Maschine M$_{i}$ unter Umständen das Token 
+	verloren gehen kann. Dieser Verlust muss bemerkt werden!
 	
-	\item Votierungsverfahren
+	\item Beim Majority Consensus ergeben sich im Falle einer Netzwerkpartition 
+	folgende mögliche Situationen:
+	\begin{itemize}
+		\item Eine Netzwerkpartition kann das Lese- und Schreibquorum erfüllen. 
+		Alle anderen Partitionen hingegen können weder lesen noch schreiben.
+		
+		\item Mehere Partitionen können das Lesequorum erfüllen, jedoch keine 
+		Gruppe das Schreibquorum.
+		
+		\item Keine Partition kan das Lesequorum erfüllen und es sind somit 
+		keine Operatioen auf den Daten möglich (Deadlock).
+		
+	\end{itemize}
 
 \end{enumerate}
 
