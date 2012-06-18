@@ -1,0 +1,55 @@
+ToTem
+
+Bem: 
+1) Jeder Melticast erhält eine Sequenznummer (seq)
+	-> Damit erreichen wir, dass die Totem-Middleware die empfangene Multicasts 
+	gemäß der Sequenznummer der Anwendung zustellt
+		-> virtuell synchron
+2) + verteiltes Verfahren
+3) Nachteil: Aufwand für 
+	- Tokenüberwachung (Verlust, Duplikate)
+	- Ringrekonfiguration nach Ausfall/Neustart
+	=> Group Membership Protocol
+4) Voraussetzung: zuverlässige Kommunikationskanäle
+5) Aufwand: o <= n <= #Maschinen im Ring (n = #Tokenwechsel)
+6) Anwednungsspezifische Parameter:
+	- Wieviele Multicasts dürfen verschickt werden nach Erhalt des Tokens?
+	- Wahl des Timeout z.B. für Token-Kontrolle?
+	
+Vergleich Zentraler Ansatz vs. Token-on-Demand vs Totem
+[note] Zeitablaufdiagramme; waren an der Tafel, müssen nochmal recherchiert werden
+
+
+Votierungsverfahren
+
+Bem:
+1) Aufwand im Best-Case: Request- und Ende-Multicast
+	Lesen: LQ
+	Schreiben: 2*SQ
+2) Bsp.: 2 LAN
+3) Fairness? Erster bekommt den Vorzug
+
+
+Synchronisationsregeln für die Wahl von SQ und LQ:
+1) LQ + SQ > S
+2) 2*SQ > S
+
+Bsp:
+S = 6
+Majority Consesus
+LQ=4	LQ=2	LQ=1
+SQ=4	SQ=5	SQ=6
+
+Idee: Weighted Voting
+Zuverlässige Server erhalten Mehrfachstimme
+meist: gerade Anzahl S auf S+1 erhöhen
+
+
+
+
+
+
+
+
+
+
