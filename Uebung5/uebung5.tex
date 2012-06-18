@@ -65,11 +65,19 @@ Blah
 
 \begin{itemize}
 
-	\item Blah
+	\item Beim Web Service Ring Replication Protocol (WS RRP) wird mit Hilfe des Tokens nicht nur
+		der Zugriff geregelt, sondern auch Anwendungs-Nachrichten verteilt. Welche an den Token gehangen
+		werden, somit wird keine Multicast-Infrastruktur benötigt.
 
-	\item Blah
+	\item Beim JGroups-Sequenzer existiert ein extra, zentraler Prozess, welcher eine Ordnung der
+		Nachrichten fest. Dies wird per Multicast an die Gruppenmitglieder verteilt, welche sich
+		danach an diese Ordnung halten. Dabei basiert das Sequenzer-Protokoll auf den
+		pbcast-Protokolle.
 	
-	\item Blah
+	\item Die Response-Zeiten von JGroups sind geringer als von WS RRP. Gründe dafür sind der
+		Overhead vom Web-Service-Stack und den GSI-Sicherheits Eigenschaften von WS RRP. So nutzt WS
+		RRP für jede Punkt-zu-Punkt Kommunikation einen eigenen Session-Key, hingegegen nutzt
+		JGroups eine geteilten Session-Key für das ganze Cluster.
 
 \end{itemize}
 
