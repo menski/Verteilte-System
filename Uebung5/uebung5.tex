@@ -37,23 +37,26 @@
 
 \section*{Aufgabe 5.1}
 
-\begin{enumerate}
-
-	\item Blah
-
-	\item Blah
-
-\end{enumerate}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\textwidth]{aufgabe1.png}
+  \caption{Vergangenheits-, Zukunftskegel und Nebenläufigkeit}
+\end{figure}
 
 \section*{Aufgabe 5.2}
 
 \begin{enumerate}
 
-	\item Blah
+	\item Der Zentrale Ansatz bietet eine geringe Fehlertoleranz gegenüber 
+	Client- bzw. Server-Crashes. Desweiteren kann der Server bei großer 
+	Konkurrenz unter den Sendern zum Flaschenhals werden und das komplette 
+	System lahm legen.
 	
-	\item Blah
+	\item Das Token-Verfahren ist fehleranfällig, da beim Ausfall eines 
+	Prozesses P$_{i}$ / einer Maschine M$_{i}$ ein Tokenverlust erkannt werden 
+	muss.
 	
-	\item Blah
+	\item Votierungsverfahren
 
 \end{enumerate}
 
@@ -65,6 +68,8 @@ Blah
 
 \begin{itemize}
 
+\begin{itemize}
+
 	\item Beim Web Service Ring Replication Protocol (WS RRP) wird mit Hilfe des Tokens nicht nur
 		der Zugriff geregelt, sondern auch Anwendungs-Nachrichten verteilt. Welche an den Token gehangen
 		werden, somit wird keine Multicast-Infrastruktur benötigt.
@@ -73,7 +78,7 @@ Blah
 		Nachrichten fest. Dies wird per Multicast an die Gruppenmitglieder verteilt, welche sich
 		danach an diese Ordnung halten. Dabei basiert das Sequenzer-Protokoll auf den
 		pbcast-Protokolle.
-	
+
 	\item Die Response-Zeiten von JGroups sind geringer als von WS RRP. Gründe dafür sind der
 		Overhead vom Web-Service-Stack und den GSI-Sicherheits Eigenschaften von WS RRP. So nutzt WS
 		RRP für jede Punkt-zu-Punkt Kommunikation einen eigenen Session-Key, hingegegen nutzt
@@ -81,8 +86,20 @@ Blah
 
 \end{itemize}
 
+\end{itemize}
+
 \section*{Aufgabe 5.5}
 
-Blah
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\textwidth]{bully1.png}
+  \caption{Bully-Algorithmus. * Start des Bully-Algorithmus}
+\end{figure}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=1\textwidth]{bully2.png}
+  \caption{Broadcasts im Bully-Algorithmus}
+\end{figure}
 
 \end{document}
