@@ -2,7 +2,7 @@
 
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
-sid = 1
+sid = 0
 
 
 def session_id():
